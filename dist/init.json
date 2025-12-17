@@ -1,0 +1,392 @@
+{
+    "select": [
+        {
+            "url": "https://zh.v2nodes.com/",
+            "sel_all": [
+                ".btn-default",
+                "input"
+            ]
+        },
+        {
+            "url": "https://d.zrf.me/vless-base64"
+        },
+        {
+            "url": "https://github.com/kismetpro/NodeSuber/raw/refs/heads/main/out/All_Configs_Sub.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Long_term_subscription2"
+        },
+        {
+            "url": " https://raw.githubusercontent.com/StormragerCN/v2ray/refs/heads/main/v2ray"
+        },
+        {
+            "url": " https://ghfile.geekertao.top/https://github.com/PuddinCat/BestClash/blob/main/proxies.yaml"
+        },
+        {
+            "url": " https://raw.githubusercontent.com/ccpthisbigdog/freedomchina/refs/heads/main/subdom.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/hello-world-1989/cn-news/main/end-gfw-together"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Leon406/SubCrawler/refs/heads/main/sub/share/v2",
+            "id": 6
+        },
+        {
+            "url": "https://www.xrayvip.com/free.txt",
+            "id": 7
+        },
+        {
+            "url": "https://d.zrf.me/vless-base64",
+            "id": 8
+        },
+        {
+            "url": "https://raw.githubusercontent.com/a2470982985/getNode/main/v2ray.txt",
+            "id": 9
+        },
+        {
+            "url": "https://raw.githubusercontent.com/snakem982/proxypool/main/source/v2ray-2.txt",
+            "id": 10
+        },
+        {
+            "url": "https://raw.githubusercontent.com/snakem982/proxypool/main/source/v2ray.txt",
+            "id": 11
+        },
+        {
+            "url": "https://raw.githubusercontent.com/umelabs/node.umelabs.dev/master/Subscribe/v2ray.md",
+            "id": 12
+        },
+        {
+            "url": "https://ghp.ci/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/v.txt",
+            "id": 13
+        },
+        {
+            "url": "https://cdn.jsdelivr.net/gh/ermaozi01/free_clash_vpn/subscribe/v2ray.txt",
+            "id": 14
+        },
+        {
+            "url": "https://github.com/qzwqzw/freeVpn",
+            "sel": [
+                "article code"
+            ],
+            "id": 15
+        },
+        {
+            "url": "https://v2raynews.com/category/free-proxy/",
+            "sel": [
+                "li"
+            ],
+            "id": 16
+        },{
+            "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
+            "sel": [
+                "article pre:nth-of-type(6)"
+            ],
+            "id": 16
+        },
+        {
+            "url": "https://www.iyio.net/search/label/%E5%85%8D%E8%B4%B9%E8%8A%82%E7%82%B9",
+            "sel": [
+                ".name a",
+                "#getV2ray"
+            ],
+            "id": 17
+        },
+        {
+            "url": "https://www.clashstair.com/r/category/freenode",
+            "sel": [
+                ".index-post-text-small a",
+                "p"
+            ],
+            "id": 17
+        },
+        {
+            "url": "https://v2raynode.net/archives/category/freenode",
+            "sel": [
+                ".index-post-text-small a",
+                "p"
+            ],
+            "id": 17
+        },
+        {
+            "url": "https://v2raynode.org/free/",
+            "sel": [
+                ".wp-block-preformatted"
+            ],
+            "id": 17
+        },
+        {
+            "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt",
+            "id": 18
+        },
+        {
+            "url": "https://github.com/mksshare/mksshare.github.io",
+            "sel": [
+                "article code"
+            ],
+            "id": 19
+        },
+        {
+            "url": "https://github.com/tolinkshare2/tolinkshare2.github.io",
+            "sel": [
+                "article code"
+            ],
+            "id": 20
+        },
+        {
+            "url": "https://www.mlfenx.com/freenode",
+            "sel": [
+                ".hidden a",
+                "p"
+            ],
+            "id": 22
+        },
+        {
+            "url": "https://www.115xmw.com/",
+            "sel": [
+                ".i-article-summary a",
+                "article p:nth-of-type(9)"
+            ],
+            "id": 22
+        },
+        {
+            "url": "https://nodecat.org/",
+            "sel": [
+                ".post_def_title a",
+                "article p:nth-of-type(14)"
+            ],
+            "id": 24
+        },
+        {
+            "url": "https://betternode.org/",
+            "sel": [
+                ".post_def_title a",
+                "article p:nth-of-type(16)"
+            ],
+            "id": 25
+        },
+        {
+            "url": "https://wenode.cc/freenode",
+            "sel": [
+                ".post_def_title a",
+                "article p:nth-of-type(15)"
+            ],
+            "id": 26
+        },
+        {
+            "url": "https://v2cross.com/1884.html",
+            "sel": [
+                ".entry-content h5"
+            ],
+            "id": 27
+        },
+        {
+            "url": "https://tglaoshiji.github.io/clashnodev2raynode//",
+            "sel": [
+                ".repo-list-item+.repo-list-item a",
+                "article ul:nth-of-type(2) li"
+            ],
+            "id": 28
+        },
+        {
+            "url": "https://free.datiya.com/",
+            "sel": [
+                ".fw1  a",
+                ".lh-copy pre:nth-of-type(2) code"
+            ],
+            "id": 29
+        },
+        {
+            "url": "https://telegeam.github.io/clashv2rayshare/",
+            "sel": [
+                ".repo-list-item+.repo-list-item a",
+                "li"
+            ],
+            "id": 30
+        },
+        {
+            "url": "https://v2rayshare.net/",
+            "sel": [
+                ".text-reset",
+                "p:nth-of-type(15)"
+            ],
+            "id": 31
+        },
+        {
+            "url": "https://nodedog.org/t/v2ray",
+            "sel": [
+                ".post_def_title a",
+                "p:nth-of-type(17)"
+            ],
+            "id": 32
+        },
+        {
+            "url": "https://www.wanzhuanmi.com/",
+            "sel": [
+                ".excerpt  a",
+                "article p"
+            ],
+            "id": 33
+        },
+        {
+            "url": "https://nodefree.me/",
+            "sel": [
+                ".post-title a",
+                ".section p"
+            ],
+            "id": 34
+        },
+        {
+            "url": "https://clashnode.github.io/",
+            "sel": [
+                ".xcblog-blog-url",
+                ".col-md-8 p"
+            ],
+            "id": 35
+        },
+        {
+            "url": "https://t.me/s/hkaa0",
+            "sel": [
+                ".media_supported_cont code"
+            ],
+            "id": 36
+        },
+        {
+            "url": "https://www.freeclashnode.com/free-node/",
+            "sel": [
+                ".item-heading a",
+                ".post-content-content p:nth-of-type(15)"
+            ],
+            "id": 37
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ssrsub/ssr/master/V2Ray",
+            "id": 38
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt",
+            "id": 39
+        },
+        {
+            "url": "https://proxy.v2gh.com/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+            "id": 40
+        },
+        {
+            "url": "https://github.com/ripaojiedian/freenode",
+            "sel": [
+                "article [dir=\"auto\"]:nth-child(9) a"
+            ],
+            "id": 41
+        },
+        {
+            "url": "https://freenode.openrunner.net/tag/v2ray/",
+            "sel": [
+                ".mb-5 ",
+                ".highlight:nth-of-type(2)  code "
+            ],
+            "id": 42
+        },
+        {
+            "url": "https://www.mibei77.com/",
+            "sel": [
+                ".entry-title a",
+                ".post-body p:nth-of-type(9)"
+            ],
+            "id": 43
+        },
+        {
+            "url": "https://raw.githubusercontent.com/freefq/free/master/v2",
+            "id": 45
+        },
+        {
+            "url": "https://github.com/Flik6/getNode",
+            "sel": [
+                "article ul:nth-child(6) li:nth-child(4)"
+            ],
+            "id": 46
+        },
+        {
+            "url": "https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
+            "id": 47
+        },
+        {
+            "url": "https://raw.githubusercontent.com/somemoo/v2rayfree/main/v2rayfree",
+            "id": 48
+        },
+        {
+            "url": "https://raw.githubusercontent.com/aiboboxx/clashfree/main/clash.yml",
+            "id": 49
+        },
+        {
+            "url": "https://oneclash.cc/",
+            "sel": [
+                ".post_def_title a",
+                ".wznrys p:nth-of-type(15)"
+            ],
+            "id": 50
+        },
+        {
+            "url": "https://v2rayshare.net/",
+            "sel": [
+                ".post-title a",
+                ".single-content p:nth-of-type(14)"
+            ],
+            "id": 51
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan",
+            "id": 52
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/vmess",
+            "id": 53
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/vless",
+            "id": 54
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/temporary",
+            "id": 55
+        },
+        {
+            "url": "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
+            "id": 56
+        },
+        {
+            "url": "https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt",
+            "id": 57
+        },
+        {
+            "url": "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Splitted-By-Protocol/vmess.txt",
+            "id": 58
+        },
+        {
+            "url": "https://jsd.onmicrosoft.cn/gh/anaer/Sub@main/clash.yaml",
+            "id": 59
+        },
+        {
+            "url": "https://q3dlaxpoaq.github.io/APIs/sc0.yaml",
+            "id": 60
+        },
+        {
+            "url": "https://q3dlaxpoaq.github.io/APIs/sc2.yaml",
+            "id": 61
+        },
+        {
+            "url": "https://q3dlaxpoaq.github.io/APIs/sc3.yaml",
+            "id": 62
+        },
+        {
+            "url": "https://q3dlaxpoaq.github.io/APIs/sc4.yaml",
+            "id": 63
+        },
+        {
+            "url": "https://raw.githubusercontent.com/shaoyouvip/free/refs/heads/main/base64.txt",
+            "id": 64
+        }
+    ]
+}
