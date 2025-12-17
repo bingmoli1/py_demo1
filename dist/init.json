@@ -75,17 +75,29 @@
             "id": 15
         },
         {
+            "url": "https://github.com/free-nodes/v2rayfree",
+            "sel": [
+                "code"
+            ],
+            "id": 15
+        },  {
+            "url": "https://github.com/WLget/V2ray_free",
+            "sel": [
+                "code"
+            ],
+            "id": 15
+        },
+        {
             "url": "https://v2raynews.com/category/free-proxy/",
             "sel": [
                 "li"
-            ],
-            "id": 16
-        },{
+            ]
+        },
+        {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
             "sel": [
-                "article pre:nth-of-type(6)"
-            ],
-            "id": 16
+                "pre"
+            ]
         },
         {
             "url": "https://www.iyio.net/search/label/%E5%85%8D%E8%B4%B9%E8%8A%82%E7%82%B9",
