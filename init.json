@@ -8,13 +8,7 @@
             ]
         },
         {
-            "url": "https://d.zrf.me/vless-base64"
-        },
-        {
             "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
-        },
-        {
-            "url": "https://github.com/kismetpro/NodeSuber/raw/refs/heads/main/out/All_Configs_Sub.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
@@ -23,13 +17,13 @@
             "url": "https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Long_term_subscription2"
         },
         {
-            "url": " https://raw.githubusercontent.com/StormragerCN/v2ray/refs/heads/main/v2ray"
+            "url": "https://raw.githubusercontent.com/StormragerCN/v2ray/refs/heads/main/v2ray"
         },
         {
-            "url": " https://ghfile.geekertao.top/https://github.com/PuddinCat/BestClash/blob/main/proxies.yaml"
+            "url": "https://ghfile.geekertao.top/https://github.com/PuddinCat/BestClash/blob/main/proxies.yaml"
         },
         {
-            "url": " https://raw.githubusercontent.com/ccpthisbigdog/freedomchina/refs/heads/main/subdom.txt"
+            "url": "https://raw.githubusercontent.com/ccpthisbigdog/freedomchina/refs/heads/main/subdom.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/hello-world-1989/cn-news/main/end-gfw-together"
@@ -43,28 +37,12 @@
             "id": 7
         },
         {
-            "url": "https://d.zrf.me/vless-base64",
-            "id": 8
-        },
-        {
-            "url": "https://raw.githubusercontent.com/a2470982985/getNode/main/v2ray.txt",
-            "id": 9
-        },
-        {
             "url": "https://raw.githubusercontent.com/snakem982/proxypool/main/source/v2ray-2.txt",
             "id": 10
         },
         {
-            "url": "https://raw.githubusercontent.com/snakem982/proxypool/main/source/v2ray.txt",
-            "id": 11
-        },
-        {
             "url": "https://raw.githubusercontent.com/umelabs/node.umelabs.dev/master/Subscribe/v2ray.md",
             "id": 12
-        },
-        {
-            "url": "https://ghp.ci/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/v.txt",
-            "id": 13
         },
         {
             "url": "https://cdn.jsdelivr.net/gh/ermaozi01/free_clash_vpn/subscribe/v2ray.txt",
@@ -381,10 +359,6 @@
         {
             "url": "https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt",
             "id": 57
-        },
-        {
-            "url": "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Splitted-By-Protocol/vmess.txt",
-            "id": 58
         },
         {
             "url": "https://jsd.onmicrosoft.cn/gh/anaer/Sub@main/clash.yaml",
