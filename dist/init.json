@@ -307,18 +307,11 @@
                 "article ul:nth-child(6) li:nth-child(4)"
             ],
             "id": 46
-        },
-        {
-            "url": "https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
-            "id": 47
-        },
-        {
-            "url": "https://raw.githubusercontent.com/somemoo/v2rayfree/main/v2rayfree",
-            "id": 48
-        },
-        {
-            "url": "https://raw.githubusercontent.com/aiboboxx/clashfree/main/clash.yml",
-            "id": 49
+        },{
+            "url": "https://github.com/dannysl/aiboboxx-v2rayfree",
+            "sel": [
+                "code"
+            ]
         },
         {
             "url": "https://oneclash.cc/",
