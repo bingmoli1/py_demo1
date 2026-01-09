@@ -78,7 +78,7 @@ class SubGet:
         el = selectors[0]
         await page.wait_for_selector(el,state="attached")
         if len(selectors) == 1:
-            contents = await page.eval_on_selector_all(el, "els => els.map(e => e.textContent || e.value || '')")
+            contents = await page.eval_on_selector_all(el, f"els => els.map(e => e.textContent  ||  e.value || e.getAttribute('{el}')|| '')")
             url_pattern = re.compile(r'https?://[^\s/$.?#].[^\s]*')
             match_urls = []
             for content in contents:

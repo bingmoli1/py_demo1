@@ -11,6 +11,9 @@
             "url": "https://d.zrf.me/vless-base64"
         },
         {
+            "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
+        },
+        {
             "url": "https://github.com/kismetpro/NodeSuber/raw/refs/heads/main/out/All_Configs_Sub.txt"
         },
         {
@@ -80,7 +83,8 @@
                 "code"
             ],
             "id": 15
-        },  {
+        },
+        {
             "url": "https://github.com/WLget/V2ray_free",
             "sel": [
                 "code"
@@ -308,6 +312,12 @@
                 ".post-body p:nth-of-type(9)"
             ],
             "id": 43
+        },
+        {
+            "url": "https://b.freev2.net/",
+            "sel": [
+                "button[data-clipboard-text]"
+            ]
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2",
