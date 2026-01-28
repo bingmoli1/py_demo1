@@ -147,22 +147,6 @@
             "id": 22
         },
         {
-            "url": "https://nodecat.org/",
-            "sel": [
-                ".post_def_title a",
-                "article p:nth-of-type(14)"
-            ],
-            "id": 24
-        },
-        {
-            "url": "https://betternode.org/",
-            "sel": [
-                ".post_def_title a",
-                "article p:nth-of-type(16)"
-            ],
-            "id": 25
-        },
-        {
             "url": "https://wenode.cc/freenode",
             "sel": [
                 ".post_def_title a",
@@ -208,14 +192,6 @@
                 "p:nth-of-type(15)"
             ],
             "id": 31
-        },
-        {
-            "url": "https://nodedog.org/t/v2ray",
-            "sel": [
-                ".post_def_title a",
-                "p:nth-of-type(17)"
-            ],
-            "id": 32
         },
         {
             "url": "https://www.wanzhuanmi.com/",
