@@ -170,14 +170,6 @@
             "id": 28
         },
         {
-            "url": "https://free.datiya.com/",
-            "sel": [
-                ".fw1  a",
-                ".lh-copy pre:nth-of-type(2) code"
-            ],
-            "id": 29
-        },
-        {
             "url": "https://telegeam.github.io/clashv2rayshare/",
             "sel": [
                 ".repo-list-item+.repo-list-item a",
@@ -250,14 +242,6 @@
                 "article [dir=\"auto\"]:nth-child(9) a"
             ],
             "id": 41
-        },
-        {
-            "url": "https://freenode.openrunner.net/tag/v2ray/",
-            "sel": [
-                ".mb-5 ",
-                ".highlight:nth-of-type(2)  code "
-            ],
-            "id": 42
         },
         {
             "url": "https://www.mibei77.com/",
