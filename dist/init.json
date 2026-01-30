@@ -82,6 +82,17 @@
             ]
         },
         {
+            "url": "https://github.com/hysteria350/free-jichang",
+            "sel": [
+                "code"
+            ]
+        },   {
+            "url": "https://github.com/junjun266/FreeProxyGo?tab=readme-ov-file",
+            "sel": [
+                "a"
+            ]
+        },
+        {
             "url": "https://www.iyio.net/search/label/%E5%85%8D%E8%B4%B9%E8%8A%82%E7%82%B9",
             "sel": [
                 ".name a",
@@ -267,7 +278,8 @@
                 "article ul:nth-child(6) li:nth-child(4)"
             ],
             "id": 46
-        },{
+        },
+        {
             "url": "https://github.com/dannysl/aiboboxx-v2rayfree",
             "sel": [
                 "code"
