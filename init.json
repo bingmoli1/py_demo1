@@ -46,6 +46,22 @@
             "id": 14
         },
         {
+            "url": "https://v2raydog.com/",
+            "sel": [
+                ".hoverColor",
+                "p"
+            ],
+            "id": 15
+        },
+        {
+            "url": "https://nodesdz.com/",
+            "sel": [
+                "h3 a",
+                "#v2rayBtn"
+            ],
+            "id": 15
+        },
+        {
             "url": "https://github.com/qzwqzw/freeVpn",
             "sel": [
                 "article code"
@@ -83,7 +99,8 @@
             "sel": [
                 "code"
             ]
-        },   {
+        },
+        {
             "url": "https://github.com/junjun266/FreeProxyGo?tab=readme-ov-file",
             "sel": [
                 "a"
@@ -189,7 +206,7 @@
             "url": "https://v2rayshare.net/",
             "sel": [
                 ".text-reset",
-                "p:nth-of-type(15)"
+                "p"
             ],
             "id": 31
         },
@@ -289,14 +306,6 @@
                 ".wznrys p:nth-of-type(15)"
             ],
             "id": 50
-        },
-        {
-            "url": "https://v2rayshare.net/",
-            "sel": [
-                ".post-title a",
-                ".single-content p:nth-of-type(14)"
-            ],
-            "id": 51
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan",
