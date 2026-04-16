@@ -151,13 +151,6 @@
             "id": 18
         },
         {
-            "url": "https://github.com/mksshare/mksshare.github.io",
-            "sel": [
-                "article code"
-            ],
-            "id": 19
-        },
-        {
             "url": "https://github.com/tolinkshare2/tolinkshare2.github.io",
             "sel": [
                 "article code"
@@ -194,22 +187,6 @@
                 ".entry-content h5"
             ],
             "id": 27
-        },
-        {
-            "url": "https://tglaoshiji.github.io/clashnodev2raynode//",
-            "sel": [
-                ".repo-list-item+.repo-list-item a",
-                "article ul:nth-of-type(2) li"
-            ],
-            "id": 28
-        },
-        {
-            "url": "https://telegeam.github.io/clashv2rayshare/",
-            "sel": [
-                ".repo-list-item+.repo-list-item a",
-                "li"
-            ],
-            "id": 30
         },
         {
             "url": "https://v2rayshare.net/",
