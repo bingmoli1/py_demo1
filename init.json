@@ -258,7 +258,7 @@
             "url": "https://www.mibei77.com/",
             "sel": [
                 ".entry-title a",
-                ".post-body p:nth-of-type(9)"
+                ".entry-content p"
             ],
             "id": 43
         },
