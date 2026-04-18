@@ -273,7 +273,7 @@
             "url": "https://www.mibei77.com/",
             "sel": [
                 ".entry-title a",
-                ".entry-content p"
+                "p"
             ],
             "id": 43
         },
