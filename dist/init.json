@@ -199,15 +199,7 @@
                 "p"
             ],
             "id": 22
-        },
-        {
-            "url": "https://www.115xmw.com/",
-            "sel": [
-                ".i-article-summary a",
-                "article p:nth-of-type(9)"
-            ],
-            "id": 22
-        },
+        }, 
         {
             "url": "https://wenode.cc/freenode",
             "sel": [
