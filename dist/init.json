@@ -93,14 +93,6 @@
             "id": 15
         },
         {
-            "url": "https://nodesdz.com/",
-            "sel": [
-                "h3 a",
-                "#v2rayBtn"
-            ],
-            "id": 15
-        },
-        {
             "url": "https://github.com/qzwqzw/freeVpn",
             "sel": [
                 "article code"
