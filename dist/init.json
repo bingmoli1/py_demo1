@@ -186,13 +186,6 @@
             "id": 17
         },
         {
-            "url": "https://v2raynode.org/free/",
-            "sel": [
-                ".wp-block-preformatted"
-            ],
-            "id": 17
-        },
-        {
             "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt",
             "id": 18
         },
