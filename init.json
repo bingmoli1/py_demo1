@@ -207,7 +207,7 @@
         {
             "url": "https://v2cross.com/1884.html",
             "sel": [
-                ".entry-content h5"
+                "h5"
             ],
             "id": 27
         },
