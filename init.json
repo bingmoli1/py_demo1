@@ -107,6 +107,14 @@
             "id": 15
         },
         {
+            "url": "https://v2ray-free.github.io/",
+            "sel": [
+                ".xcblog-blog-url",
+                "p"
+            ],
+            "id": 15
+        },
+        {
             "url": "https://github.com/WLget/V2ray_free",
             "sel": [
                 "code"
@@ -280,7 +288,7 @@
         {
             "url": "https://www.mibei77.com/",
             "sel": [
-                ".entry-title a",
+                ".item-title a",
                 "p"
             ],
             "id": 43
