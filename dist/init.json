@@ -87,8 +87,8 @@
         {
             "url": "https://v2raydog.com/",
             "sel": [
-                ".hoverColor",
-                "p"
+                ".entry-title a",
+                "code"
             ],
             "id": 15
         },
@@ -173,14 +173,6 @@
             "url": "https://clashv2ray-hub.github.io/",
             "sel": [
                 "h2 a",
-                "p"
-            ],
-            "id": 17
-        },
-        {
-            "url": "https://v2raynode.net/archives/category/freenode",
-            "sel": [
-                ".index-post-text-small a",
                 "p"
             ],
             "id": 17
