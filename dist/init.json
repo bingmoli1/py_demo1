@@ -73,6 +73,13 @@
             "id": 14
         },
         {
+            "url": "https://www.stairnode.com/",
+            "sel": [
+                ".post-title",
+                "code"
+            ]
+        },
+        {
             "url": "https://github.com/VoroninaYanina/free-nodes",
             "sel": [
                 "code"
@@ -136,6 +143,17 @@
         {
             "url": "https://github.com/hysteria350/free-jichang",
             "sel": [
+                "code"
+            ]
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt"
+
+        },
+        {
+            "url": "https://free.datiya.com/",
+            "sel": [
+                ".athelas  a",
                 "code"
             ]
         },
