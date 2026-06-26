@@ -1,4 +1,5 @@
 把快捷方式放在启动文件夹自启动
+
 打包
 ```bash
  pyinstaller -F v2.py
