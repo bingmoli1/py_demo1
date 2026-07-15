@@ -73,6 +73,9 @@
             "id": 14
         },
         {
+            "url": "  https://nodesfree.github.io/v2raynode/subscribe/v2ray.txt "
+        },
+        {
             "url": "https://www.stairnode.com/",
             "sel": [
                 ".post-title",
@@ -83,6 +86,11 @@
             "url": "https://github.com/VoroninaYanina/free-nodes",
             "sel": [
                 "code"
+            ]
+        }, {
+            "url": "https://github.com/v2raywindows/v2raywindows.github.io",
+            "sel": [
+                "a"
             ]
         },
         {
@@ -298,7 +306,7 @@
         {
             "url": "https://www.mibei77.com/",
             "sel": [
-                ".item-title a",
+                ".item-heading a",
                 "p"
             ],
             "id": 43
@@ -345,6 +353,9 @@
         {
             "url": "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
             "id": 56
+        },
+        {
+            "url": "https://raw.githubusercontent.com/LeilaoMi/AutoMergePublicNodes-Optimized/main/output/verified.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt",
