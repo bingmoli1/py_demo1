@@ -236,15 +236,22 @@
         {
             "url": "https://www.wanzhuanmi.com/",
             "sel": [
-                ".excerpt  a",
-                "article p"
-            ],
-            "id": 33
+                "h2  a",
+                ".com"
+            ]
         },
         {
             "url": "https://nodefree.me/",
             "sel": [
                 ".post-title a",
+                "p"
+            ],
+            "id": 34
+        },
+        {
+            "url": "https://oneclash.cc/",
+            "sel": [
+                ".post_def_title  a",
                 "p"
             ],
             "id": 34
@@ -298,12 +305,6 @@
                 "p"
             ],
             "id": 43
-        },
-        {
-            "url": "https://b.freev2.net/",
-            "sel": [
-                "button[data-clipboard-text]"
-            ]
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2",

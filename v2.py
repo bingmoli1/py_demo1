@@ -132,7 +132,8 @@ class SubGet:
                             num_add += 1
                             num = base + num_add
                     print(f"{id_} -  {num}  {match_url}")
-                    up_sub_item(match_url, match_url, num, convert_target)
+                    return  up_sub_item(match_url, match_url, num, convert_target)
+                print(f"失败：{url}")
             else:
                 if isinstance(selectors, list) and selectors:
                     if len(selectors) > 1:
@@ -178,7 +179,9 @@ class SubGet:
                                     base = len(select['select']) if select and 'select' in select else 0
                                     num = base + num_add
                             print(f"{id_} - {num}  {match_url}")
-                            up_sub_item(match_url, match_url, num, convert_target)
+                            return up_sub_item(match_url, match_url, num, convert_target)
+                    print(f"失败：{url}")
+
         finally:
             await asyncio.sleep(1)
             await page.close()
