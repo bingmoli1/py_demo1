@@ -166,14 +166,6 @@
             ]
         },
         {
-            "url": "https://www.iyio.net/search/label/%E5%85%8D%E8%B4%B9%E8%8A%82%E7%82%B9",
-            "sel": [
-                ".name a",
-                "#getV2ray"
-            ],
-            "id": 17
-        },
-        {
             "url": "https://www.clashstair.com/r/category/freenode",
             "sel": [
                 ".index-post-text-small a",
@@ -307,12 +299,6 @@
                 "article ul:nth-child(6) li:nth-child(4)"
             ],
             "id": 46
-        },
-        {
-            "url": "https://github.com/dannysl/aiboboxx-v2rayfree",
-            "sel": [
-                "code"
-            ]
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan",
