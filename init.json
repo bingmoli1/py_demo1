@@ -79,7 +79,7 @@
             "url": "https://www.stairnode.com/",
             "sel": [
                 ".post-title",
-                "code"
+                "span"
             ]
         },
         {
@@ -104,7 +104,7 @@
             "url": "https://v2raydog.com/",
             "sel": [
                 ".entry-title a",
-                "code"
+                "span"
             ],
             "id": 15
         },
@@ -136,12 +136,6 @@
                 "code"
             ],
             "id": 15
-        },
-        {
-            "url": "https://v2raynews.com/category/free-proxy/",
-            "sel": [
-                "li"
-            ]
         },
         {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
@@ -223,21 +217,6 @@
             "id": 22
         },
         {
-            "url": "https://wenode.cc/freenode",
-            "sel": [
-                ".post_def_title a",
-                "article p:nth-of-type(15)"
-            ],
-            "id": 26
-        },
-        {
-            "url": "https://v2cross.com/1884.html",
-            "sel": [
-                "h5"
-            ],
-            "id": 27
-        },
-        {
             "url": "https://v2rayshare.net/",
             "sel": [
                 ".text-reset",
@@ -249,7 +228,7 @@
             "url": "https://www.wanzhuanmi.com/",
             "sel": [
                 "h2  a",
-                ".com"
+                "span"
             ]
         },
         {
@@ -287,7 +266,7 @@
             "url": "https://www.freeclashnode.com/free-node/",
             "sel": [
                 ".item-heading a",
-                ".post-content-content p:nth-of-type(15)"
+                "p"
             ],
             "id": 37
         },
