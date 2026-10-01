@@ -158,8 +158,8 @@
         {
             "url": "https://www.clashstair.com/r/category/freenode",
             "sel": [
-                ".index-post-text-small a",
-                "p"
+                "h2  a",
+                "span"
             ]
         },
         {
