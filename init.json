@@ -294,6 +294,18 @@
         },
         {
             "url": "https://raw.githubusercontent.com/shaoyouvip/free/refs/heads/main/base64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_base64_Sub.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_base64_Sub.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge_base64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt"
         }
     ]
 }
