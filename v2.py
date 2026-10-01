@@ -114,6 +114,40 @@ class SubGet:
 
     def __init__(self, browser):
         self.browser = browser
+        self.context = None
+
+    async def goto_with_retry(
+        self,
+        page,
+        url,
+        attempts=3,
+        timeout=20000
+    ):
+        last_err = None
+
+        for attempt in range(1, attempts + 1):
+
+            try:
+
+                await page.goto(
+                    url,
+                    wait_until="domcontentloaded",
+                    timeout=timeout
+                )
+
+                return
+
+            except Exception as e:
+
+                last_err = e
+
+                print(
+                    f"加载失败({attempt}/{attempts}): {url}"
+                )
+
+                await asyncio.sleep(2)
+
+        raise last_err
 
     async def scrape_level(self, page, selectors):
         """
@@ -212,7 +246,7 @@ class SubGet:
                     href
                 )
 
-                new_page = await self.browser.new_page()
+                new_page = await self.context.new_page()
 
                 try:
 
@@ -220,9 +254,9 @@ class SubGet:
                         f"进入页面: {full_href}"
                     )
 
-                    await new_page.goto(
-                        full_href,
-                        wait_until="domcontentloaded"
+                    await self.goto_with_retry(
+                        new_page,
+                        full_href
                     )
 
                     # 继续处理下一层
@@ -285,13 +319,17 @@ class SubGet:
 
             return
 
-        page = await self.browser.new_page()
+        # 同一任务的所有页面共享一个上下文,
+        # 保留 Cookie(如 Cloudflare 放行凭证)
+        self.context = await self.browser.new_context()
+
+        page = await self.context.new_page()
 
         try:
 
-            await page.goto(
-                url,
-                wait_until="domcontentloaded"
+            await self.goto_with_retry(
+                page,
+                url
             )
 
             # ==================================================
@@ -446,9 +484,9 @@ class SubGet:
                                     href
                                 )
 
-                                await page.goto(
-                                    full_href,
-                                    wait_until="domcontentloaded"
+                                await self.goto_with_retry(
+                                    page,
+                                    full_href
                                 )
 
                             else:
@@ -556,6 +594,8 @@ class SubGet:
             await asyncio.sleep(1)
 
             await page.close()
+
+            await self.context.close()
 
 
 async def main():
