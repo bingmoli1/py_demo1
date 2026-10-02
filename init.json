@@ -8,9 +8,6 @@
             ]
         },
         {
-            "url": "https://raw.githubusercontent.com/vless-reality/clash-v2rayn-Shadowrocket/refs/heads/main/.github/links/clash.yaml"
-        },
-        {
             "url": "https://raw.githubusercontent.com/ninjastrikers/Nexus-nodes/main/configs/all.txt"
         },
         {
@@ -241,13 +238,10 @@
             ]
         },
         {
-            "url": "https://raw.githubusercontent.com/ssrsub/ssr/master/V2Ray"
-        },
-        {
             "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt"
         },
         {
-            "url": "https://proxy.v2gh.com/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub"
+            "url": "https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub"
         },
         {
             "url": "https://github.com/ripaojiedian/freenode",
