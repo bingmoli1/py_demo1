@@ -1,4 +1,3 @@
-
 import asyncio
 import os
 import re
@@ -8,6 +7,7 @@ import sqlite3
 
 import psutil
 from playwright.async_api import async_playwright
+from urllib.parse import urlparse
 
 URL_PATTERN = re.compile(
     r'https?://[^\s/$.?#].[^\s]*'
@@ -77,7 +77,41 @@ def close_db_conn():
     DB_CONN = None
 
 
+def is_valid_url(url):
+    """校验链接格式,非法返回 False"""
+    if not url or not isinstance(url, str):
+        return False
+
+    url = url.strip()
+    if not url:
+        return False
+
+    if not url.startswith(('http://', 'https://')):
+        return False
+
+    if not URL_PATTERN.fullmatch(url):
+        return False
+
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return False
+
+    if parsed.scheme not in ('http', 'https'):
+        return False
+    if not parsed.netloc:
+        return False
+    if not parsed.hostname:
+        return False
+
+    return True
+
+
 def up_sub_item(url, remarks, id_, convert_target):
+    if not is_valid_url(url):
+        print(f"跳过非法链接: {url}")
+        return
+
     if id_ not in not_clean_arr:
         not_clean_arr.add(id_)
 
