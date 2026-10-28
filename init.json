@@ -35,9 +35,6 @@
             "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
         },
         {
-            "url": "https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/permanent/mihomo.yaml"
-        },
-        {
             "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
         },
         {
@@ -60,9 +57,6 @@
         },
         {
             "url": "https://raw.githubusercontent.com/umelabs/node.umelabs.dev/master/Subscribe/v2ray.md"
-        },
-        {
-            "url": "https://cdn.jsdelivr.net/gh/ermaozi01/free_clash_vpn/subscribe/v2ray.txt"
         },
         {
             "url": "https://www.stairnode.com/",
@@ -289,9 +283,6 @@
             "url": "https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.txt"
         },
         {
-            "url": "https://raw.githubusercontent.com/shaoyouvip/free/refs/heads/main/base64.txt"
-        },
-        {
             "url": "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_base64_Sub.txt"
         },
         {
@@ -302,6 +293,18 @@
         },
         {
             "url": "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Alirewa/V2ray-Configs/main/config.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector/main/sub/mix"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ts-sf/fly/main/v2"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml"
         }
     ]
 }
