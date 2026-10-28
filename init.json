@@ -64,7 +64,7 @@
                 ".post-title",
                 "span"
             ],
-            "err": 2
+            "err": 3
         },
         {
             "url": "https://github.com/VoroninaYanina/free-nodes",
@@ -90,7 +90,7 @@
                 ".entry-title a",
                 "span"
             ],
-            "err": 2
+            "err": 3
         },
         {
             "url": "https://github.com/qzwqzw/freeVpn",
@@ -103,7 +103,7 @@
             "sel": [
                 "code"
             ],
-            "err": 2
+            "err": 3
         },
         {
             "url": "https://v2ray-free.github.io/",
@@ -152,7 +152,7 @@
                 "h2  a",
                 "span"
             ],
-            "err": 2
+            "err": 3
         },
         {
             "url": "https://v2raynode.com/",
@@ -197,7 +197,7 @@
                 "h2  a",
                 "span"
             ],
-            "err": 2
+            "err": 3
         },
         {
             "url": "https://nodefree.me/",
