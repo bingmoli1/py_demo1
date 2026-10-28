@@ -27,6 +27,53 @@ PAGE_LIMIT = None
 
 DB_PATH = None
 DB_CONN = None
+INIT_PATH = None
+
+
+def add_error_count(cfg):
+    """没抓到订阅链接时,给配置对象叠加错误次数"""
+    if cfg is None:
+        return
+
+    cfg['err'] = cfg.get('err', 0) + 1
+
+    print(
+        f"错误次数 +1 -> {cfg['err']}  {cfg.get('url')}"
+    )
+
+
+def reset_error_count(cfg):
+    """成功抓到订阅链接时,错误次数归零"""
+    if cfg is None:
+        return
+
+    if cfg.get('err'):
+        cfg['err'] = 0
+        print(
+            f"成功,错误次数归零  {cfg.get('url')}"
+        )
+
+
+def save_init_json():
+    """运行结束后把错误次数写回 init.json"""
+    if not INIT_PATH or select is None:
+        return
+
+    # id 每次运行都会重新分配,不用写回文件
+    for v in select.get('select', []):
+        v.pop('id', None)
+
+    try:
+        with open(
+            INIT_PATH, 'w', encoding='utf-8'
+        ) as f:
+            json.dump(
+                select, f,
+                ensure_ascii=False, indent=4
+            )
+        print('已保存错误次数到 init.json')
+    except OSError as e:
+        print(f'保存 init.json 失败: {e}')
 
 
 def get_running_v2rayn_path():
@@ -391,7 +438,8 @@ class SubGet:
         url,
         selectors,
         id_,
-        all_levels=False
+        all_levels=False,
+        cfg=None
     ):
 
         global not_clean_arr
@@ -487,6 +535,9 @@ class SubGet:
                     print(
                         f"失败：{url}"
                     )
+                    add_error_count(cfg)
+                else:
+                    reset_error_count(cfg)
 
             # ==================================================
             # 普通 sel 模式:只保存第一条
@@ -607,6 +658,8 @@ class SubGet:
                                 f"{id_} - {num}  {match_url}"
                             )
 
+                            reset_error_count(cfg)
+
                             return up_sub_item(
                                 match_url,
                                 match_url,
@@ -618,6 +671,8 @@ class SubGet:
                         f"失败：{url}"
                     )
 
+                    add_error_count(cfg)
+
         finally:
             await page.close()
             await self.context.close()
@@ -628,6 +683,7 @@ async def main():
     global select
     global lock
     global PAGE_LIMIT
+    global INIT_PATH
 
     executable = (
         "C:\\Program Files (x86)\\Microsoft\\Edge"
@@ -694,6 +750,8 @@ async def main():
 
                 return
 
+            INIT_PATH = init_path
+
             # ==========================================
             # 读取配置
             # ==========================================
@@ -744,7 +802,8 @@ async def main():
                                 v['url'],
                                 v.get('sel_all'),
                                 i + 1,
-                                all_levels=True
+                                all_levels=True,
+                                cfg=v
                             )
 
                         else:
@@ -754,7 +813,8 @@ async def main():
                             ).initialize(
                                 v['url'],
                                 v.get('sel'),
-                                i + 1
+                                i + 1,
+                                cfg=v
                             )
 
                     except Exception as e:
@@ -763,6 +823,8 @@ async def main():
                             f"任务 {i + 1} 失败："
                             f"{v['url']}，错误：{e}"
                         )
+
+                        add_error_count(v)
 
             # ==========================================
             # 创建任务
@@ -782,6 +844,12 @@ async def main():
             await asyncio.gather(
                 *tasks
             )
+
+            # ==========================================
+            # 保存错误次数到 init.json
+            # ==========================================
+
+            save_init_json()
 
             # ==========================================
             # 清理数据库
