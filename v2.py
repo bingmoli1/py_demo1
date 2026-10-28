@@ -27,7 +27,23 @@ PAGE_LIMIT = None
 
 DB_PATH = None
 DB_CONN = None
+DB_PENDING = 0
 INIT_PATH = None
+
+
+def db_commit(force=False):
+    """批量提交:攒够 10 条或强制时才 commit"""
+    global DB_PENDING
+
+    if DB_CONN is None:
+        return
+
+    if DB_PENDING >= 10 or (force and DB_PENDING):
+        try:
+            DB_CONN.commit()
+        except sqlite3.Error:
+            pass
+        DB_PENDING = 0
 
 
 def add_error_count(cfg):
@@ -115,6 +131,8 @@ def get_db_path():
 def close_db_conn():
     global DB_CONN
 
+    db_commit(force=True)
+
     try:
         if DB_CONN is not None:
             DB_CONN.close()
@@ -188,9 +206,20 @@ def up_sub_item(url, remarks, id_, convert_target):
 
             if DB_CONN is None:
                 DB_CONN = sqlite3.connect(db_path)
+                # v2rayN 同时在读库:等锁而不是立刻报错
+                DB_CONN.execute(
+                    'PRAGMA busy_timeout = 5000'
+                )
+                # 牺牲一点崩溃安全性换速度
+                DB_CONN.execute(
+                    'PRAGMA synchronous = NORMAL'
+                )
 
             DB_CONN.execute(sql, args)
-            DB_CONN.commit()
+
+            global DB_PENDING
+            DB_PENDING += 1
+            db_commit()
             return
         except sqlite3.Error as e:
             print(f"数据库错误: {e}")
@@ -220,6 +249,15 @@ def cleanup_database(num_list):
     try:
         if DB_CONN is None:
             DB_CONN = sqlite3.connect(db_path)
+            DB_CONN.execute(
+                'PRAGMA busy_timeout = 5000'
+            )
+            DB_CONN.execute(
+                'PRAGMA synchronous = NORMAL'
+            )
+
+        # 先把攒着的插入提交掉,再执行清理
+        db_commit(force=True)
 
         cursor = DB_CONN.execute(delete_sql, num_list)
         DB_CONN.commit()
@@ -279,7 +317,9 @@ class SubGet:
 
         async def block_heavy(route):
             if route.request.resource_type in (
-                'image', 'font', 'media'
+                'image', 'font', 'media',
+                'stylesheet', 'eventsource',
+                'websocket', 'manifest'
             ):
                 await route.abort()
             else:
@@ -292,7 +332,7 @@ class SubGet:
         page,
         url,
         attempts=3,
-        timeout=20000
+        timeout=15000
     ):
         last_err = None
 
@@ -309,7 +349,7 @@ class SubGet:
                 print(
                     f"加载失败({attempt}/{attempts}): {url}"
                 )
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
 
         raise last_err
 
@@ -778,11 +818,11 @@ async def main():
             # 并发控制
             # ==========================================
 
-            sem = asyncio.Semaphore(5)
+            sem = asyncio.Semaphore(8)
 
             lock = asyncio.Lock()
 
-            PAGE_LIMIT = asyncio.Semaphore(10)
+            PAGE_LIMIT = asyncio.Semaphore(16)
 
             # ==========================================
             # 单个任务
@@ -842,14 +882,8 @@ async def main():
             # ==========================================
 
             await asyncio.gather(
-                *tasks
+                *tasks, return_exceptions=True
             )
-
-            # ==========================================
-            # 保存错误次数到 init.json
-            # ==========================================
-
-            save_init_json()
 
             # ==========================================
             # 清理数据库
@@ -860,6 +894,9 @@ async def main():
             )
 
         finally:
+
+            # 无论成功还是中途异常,都把错误次数落盘
+            save_init_json()
 
             close_db_conn()
 
