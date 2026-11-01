@@ -64,25 +64,28 @@
                 ".post-title",
                 "span"
             ],
-            "err": 6
+            "err": 8
         },
         {
             "url": "https://github.com/VoroninaYanina/free-nodes",
             "sel": [
                 "code"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://github.com/v2raywindows/v2raywindows.github.io",
             "sel": [
                 "a"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://github.com/crashgfw/free-airport-nodes",
             "sel": [
                 "code"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://v2raydog.com/",
@@ -90,20 +93,21 @@
                 ".entry-title a",
                 "span"
             ],
-            "err": 6
+            "err": 8
         },
         {
             "url": "https://github.com/qzwqzw/freeVpn",
             "sel": [
                 "article code"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://github.com/free-nodes/v2rayfree",
             "sel": [
                 "code"
             ],
-            "err": 6
+            "err": 8
         },
         {
             "url": "https://v2ray-free.github.io/",
@@ -116,19 +120,22 @@
             "url": "https://github.com/WLget/V2ray_free",
             "sel": [
                 "code"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
             "sel": [
                 "pre"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://github.com/hysteria350/free-jichang",
             "sel": [
                 "code"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt"
@@ -144,7 +151,8 @@
             "url": "https://github.com/junjun266/FreeProxyGo?tab=readme-ov-file",
             "sel": [
                 "a"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://www.clashstair.com/r/category/freenode",
@@ -152,14 +160,15 @@
                 "h2  a",
                 "span"
             ],
-            "err": 6
+            "err": 8
         },
         {
             "url": "https://v2raynode.com/",
             "sel": [
                 ".item-heading a",
                 "p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://clashv2ray-hub.github.io/",
@@ -175,21 +184,24 @@
             "url": "https://github.com/tolinkshare2/tolinkshare2.github.io",
             "sel": [
                 "article code"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://www.mlfenx.com/freenode",
             "sel": [
                 ".hidden a",
                 "p"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://v2rayshare.net/",
             "sel": [
                 ".text-reset",
                 "p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://www.wanzhuanmi.com/",
@@ -197,7 +209,7 @@
                 "h2  a",
                 "span"
             ],
-            "err": 6
+            "err": 8
         },
         {
             "url": "https://nodefree.me/",
@@ -211,7 +223,8 @@
             "sel": [
                 ".post_def_title  a",
                 "p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://clashnode.github.io/",
@@ -224,14 +237,16 @@
             "url": "https://t.me/s/hkaa0",
             "sel": [
                 ".media_supported_cont code"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://www.freeclashnode.com/free-node/",
             "sel": [
                 ".item-heading a",
                 "p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt"
@@ -243,14 +258,16 @@
             "url": "https://github.com/ripaojiedian/freenode",
             "sel": [
                 "article [dir=\"auto\"]:nth-child(9) a"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://www.mibei77.com/",
             "sel": [
                 ".item-heading a",
                 "p"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2"
@@ -259,7 +276,8 @@
             "url": "https://github.com/Flik6/getNode",
             "sel": [
                 "article ul:nth-child(6) li:nth-child(4)"
-            ]
+            ],
+            "err": 2
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan"
@@ -305,6 +323,36 @@
         },
         {
             "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/configs_base64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/MustafaBaqer/VestraNet-Nodes/main/protocols/vless.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/3000S-HTTP/sNSub/main/output/vmess_base64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/nostalume/FreeNodes/main/nodes/merged.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/ZendanTeam/SS44-sub/main/SS44-base64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/longyang1233/free-nodes-sub/main/clash.yaml"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/all"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/youfoundamin/V2rayCollector/main/mixed_iran.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/iboxz/free-v2ray-collector/main/main/mix.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/refs/heads/main/Protocols/vless.txt"
         }
     ]
 }
