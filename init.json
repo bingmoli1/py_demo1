@@ -1,7 +1,7 @@
 {
     "select": [
         {
-            "url": "https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/refs/heads/main/Protocols/vless.txt"
+            "url": "https://hiddenio.com/sub/all?format=base64&limit=100"
         },
         {
             "url": "https://zh.v2nodes.com/",
@@ -67,7 +67,7 @@
                 ".post-title",
                 "span"
             ],
-            "err": 10
+            "err": 13
         },
         {
             "url": "https://github.com/VoroninaYanina/free-nodes",
@@ -96,7 +96,7 @@
                 ".entry-title a",
                 "span"
             ],
-            "err": 10
+            "err": 13
         },
         {
             "url": "https://github.com/qzwqzw/freeVpn",
@@ -110,7 +110,7 @@
             "sel": [
                 "code"
             ],
-            "err": 10
+            "err": 13
         },
         {
             "url": "https://v2ray-free.github.io/",
@@ -163,7 +163,7 @@
                 "h2  a",
                 "span"
             ],
-            "err": 10
+            "err": 13
         },
         {
             "url": "https://v2raynode.com/",
@@ -179,7 +179,7 @@
                 "h2 a",
                 "p"
             ],
-            "err": 2
+            "err": 5
         },
         {
             "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt"
@@ -197,7 +197,7 @@
                 ".hidden a",
                 "p"
             ],
-            "err": 4
+            "err": 0
         },
         {
             "url": "https://v2rayshare.net/",
@@ -213,7 +213,7 @@
                 "h2  a",
                 "span"
             ],
-            "err": 10
+            "err": 13
         },
         {
             "url": "https://nodefree.me/",
@@ -271,7 +271,7 @@
                 ".item-heading a",
                 "p"
             ],
-            "err": 4
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2"
@@ -349,6 +349,5 @@
         {
             "url": "https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/all"
         }
-
     ]
 }
