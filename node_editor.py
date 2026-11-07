@@ -1,8 +1,14 @@
 """init.json node list editor - local web server.
 
-Only uses the Python standard library. Double click "编辑节点.bat" to start.
-The server binds to 127.0.0.1 only, opens the browser, and stops when the
-console window is closed (or Ctrl+C is pressed).
+Only uses the Python standard library. Double click "编辑节点.bat" to start:
+cmd.exe runs this file with py -3 (or python) and keeps the console window
+open while the server runs. The browser page opens automatically; closing
+that page stops the server and the cmd window disappears with it.
+The server binds to 127.0.0.1 only.
+
+Env vars:
+  NODE_EDITOR_NO_BROWSER=1  do not open a browser (headless / tests)
+  NODE_EDITOR_KEEP_ALIVE=1  keep running even after the page is closed
 """
 
 import json
@@ -10,6 +16,8 @@ import os
 import shutil
 import sys
 import threading
+import time
+import traceback
 import webbrowser
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -21,6 +29,50 @@ BACKUP_DIR = os.path.join(BASE_DIR, "init_backups")
 MAX_BACKUPS = 10
 MAX_BODY = 5 * 1024 * 1024
 START_PORT = 8765
+
+HEARTBEAT_INTERVAL_NOTE = 3.0   # page sends /api/ping every 3s
+CLOSE_GRACE = 4.0               # wait after /api/bye, in case the page reloads
+HEARTBEAT_TIMEOUT = 90.0        # browser crashed / beacon never arrived
+NO_PAGE_TIMEOUT = 120.0         # browser never opened a page at all
+
+
+CONSOLELESS = False
+
+
+def setup_consoleless():
+    """Python started without a console (pythonw.exe) has stdout/stderr = None.
+
+    Keep print() working and leave a small log file for debugging. No-op under
+    normal python.exe / cmd, where messages go straight to the console window.
+    """
+    global CONSOLELESS
+    if sys.stdout is not None and sys.stderr is not None:
+        return
+    CONSOLELESS = True
+    try:
+        sink = open(os.path.join(BASE_DIR, "node_editor.log"), "a",
+                    encoding="utf-8", buffering=1)
+    except OSError:
+        sink = open(os.devnull, "w", encoding="utf-8")
+    if sys.stdout is None:
+        sys.stdout = sink
+    if sys.stderr is None:
+        sys.stderr = sink
+
+
+def fatal(message):
+    """Report a startup failure on the console, or in a dialog if there is none."""
+    try:
+        print("[ERROR] " + message, flush=True)
+    except Exception:
+        pass
+    if os.name == "nt" and CONSOLELESS:
+        try:
+            import ctypes
+            ctypes.windll.user32.MessageBoxW(0, message, "init.json Node Editor", 0x10)
+        except Exception:
+            pass
+    return 1
 
 
 def read_init():
@@ -106,8 +158,76 @@ def write_init(data):
     return text
 
 
+class AppState:
+    """Tracks whether at least one editor page is still alive."""
+
+    def __init__(self, httpd, auto_exit=True):
+        self.httpd = httpd
+        self.auto_exit = auto_exit
+        self.lock = threading.Lock()
+        self.started_at = time.time()
+        self.last_seen = self.started_at
+        self.ever_seen = False
+        self.close_at = None
+        self.stopped = False
+
+    def touch(self):
+        """A page loaded / reloaded / heartbeat. Cancels a pending exit."""
+        with self.lock:
+            self.last_seen = time.time()
+            self.ever_seen = True
+            self.close_at = None
+
+    def bye(self):
+        """The page said goodbye. Exit shortly unless another page shows up."""
+        with self.lock:
+            if not self.stopped:
+                self.close_at = time.time() + CLOSE_GRACE
+
+    def reason_to_stop(self):
+        if not self.auto_exit:
+            return None
+        with self.lock:
+            if self.stopped:
+                return None
+            now = time.time()
+            if self.close_at is not None and now >= self.close_at:
+                return "page closed"
+            # Background tabs can have timers throttled to ~1 minute,
+            # so the crash fallback needs a generous margin.
+            if self.ever_seen and now - self.last_seen > HEARTBEAT_TIMEOUT:
+                return "no heartbeat"
+            if not self.ever_seen and now - self.started_at > NO_PAGE_TIMEOUT:
+                return "no page opened"
+        return None
+
+
+def watchdog(state):
+    while True:
+        time.sleep(0.3)
+        with state.lock:
+            if state.stopped:
+                return
+        reason = state.reason_to_stop()
+        if reason:
+            with state.lock:
+                state.stopped = True
+            print("Editor page gone (%s), stopping server." % reason, flush=True)
+            # shutdown() must run outside the serve_forever() thread
+            state.httpd.shutdown()
+            return
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "NodeEditor/1.0"
+
+    @property
+    def state(self):
+        return getattr(self.server, "app_state", None)
+
+    def touch(self):
+        if self.state:
+            self.state.touch()
 
     def log_message(self, fmt, *args):
         pass
@@ -162,13 +282,19 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?", 1)[0]
         if path in ("/", "/index.html", "/node_editor.html"):
+            self.touch()
             if not os.path.isfile(HTML_PATH):
                 self._fail(500, "node_editor.html not found next to node_editor.py")
                 return
             with open(HTML_PATH, "r", encoding="utf-8") as f:
                 self._send(200, raw=f.read(), ctype="text/html; charset=utf-8")
             return
+        if path == "/api/ping":
+            self.touch()
+            self._ok(alive=True)
+            return
         if path == "/api/data":
+            self.touch()
             try:
                 data = read_init()
                 self._ok(data=data, mtime=file_mtime(), path=INIT_PATH)
@@ -217,6 +343,23 @@ class Handler(BaseHTTPRequestHandler):
                 self._ok(mtime=file_mtime(), backup=backup, count=len(data["select"]))
                 return
 
+            if path == "/api/bye":
+                # sendBeacon on pagehide. Flush any write still queued in the
+                # browser before this process goes away.
+                try:
+                    body = self._body()
+                except ValueError:
+                    body = {}
+                if body.get("data") is not None:
+                    try:
+                        write_init(validate(body["data"]))
+                    except (ValueError, TypeError, OSError, json.JSONDecodeError) as e:
+                        print("[WARN] bye flush failed: %s" % e, flush=True)
+                self._ok(closing=True)
+                if self.state:
+                    self.state.bye()
+                return
+
             if path == "/api/restore":
                 body = self._body()
                 name = body.get("name")
@@ -254,19 +397,31 @@ def pick_port():
 
 
 def main():
+    setup_consoleless()
     if not os.path.isfile(INIT_PATH):
-        print("[ERROR] init.json not found: " + INIT_PATH)
-        input("Press Enter to exit...")
-        return 1
+        return fatal("init.json not found: " + INIT_PATH)
     port = pick_port()
     url = "http://127.0.0.1:%d/" % port
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    server.daemon_threads = True
+    state = AppState(
+        server,
+        auto_exit=os.environ.get("NODE_EDITOR_KEEP_ALIVE") != "1",
+    )
+    server.app_state = state
+    threading.Thread(target=watchdog, args=(state,), daemon=True).start()
     print("Node editor running at " + url)
     print("Editing: " + INIT_PATH)
-    print("Close this window (or press Ctrl+C) to stop the server.")
+    print("Closing the editor page stops this server automatically.")
     # NODE_EDITOR_NO_BROWSER=1 is handy for headless / test runs.
     if os.environ.get("NODE_EDITOR_NO_BROWSER") != "1":
-        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+        def open_browser():
+            try:
+                if not webbrowser.open(url):
+                    print("[WARN] could not open a browser; open %s manually" % url, flush=True)
+            except Exception as e:
+                print("[WARN] could not open a browser: %s" % e, flush=True)
+        threading.Timer(0.5, open_browser).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -277,4 +432,10 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    setup_consoleless()
+    try:
+        sys.exit(main())
+    except SystemExit:
+        raise
+    except Exception:
+        sys.exit(fatal(traceback.format_exc()))

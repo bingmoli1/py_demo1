@@ -1,36 +1,19 @@
 @echo off
-chcp 65001 >nul 2>nul
-cd /d "%~dp0"
 title init.json Node Editor
+rem Plain cmd launcher. Keep this window open while editing;
+rem closing the browser page stops the server and closes this window.
+cd /d "%~dp0"
 
-set "PYCMD="
-where py >nul 2>nul
-if %errorlevel%==0 set "PYCMD=py -3"
-if defined PYCMD goto RUN
-
-where python >nul 2>nul
-if %errorlevel%==0 set "PYCMD=python"
-if defined PYCMD goto RUN
-
-echo [ERROR] Python 3 not found. Please install Python and add it to PATH.
-echo.
-pause
-exit /b 1
-
-:RUN
-echo.
-echo   init.json Node Editor
-echo   ---------------------------------------------
-echo   The browser will open automatically.
-echo   Keep this window open while editing.
-echo   Close this window (or press Ctrl+C) to stop.
-echo   ---------------------------------------------
-echo.
-%PYCMD% "%~dp0node_editor.py"
-set "RC=%ERRORLEVEL%"
-if not "%RC%"=="0" (
-  echo.
-  echo [ERROR] Server exited with code %RC%. See the message above.
-  pause
+where py >nul 2>&1
+if %errorlevel%==0 (
+    py -3 "%~dp0node_editor.py"
+) else (
+    python "%~dp0node_editor.py"
 )
-exit /b %RC%
+
+if errorlevel 1 (
+    echo.
+    echo Startup failed. Make sure Python 3 is installed and init.json exists.
+    pause
+)
+exit /b 0

@@ -145,7 +145,7 @@
 
   <div class="notice">
     <span>⚠️</span>
-    <div><b>自动保存：</b>新增、修改、删除、排序、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
+    <div><b>自动保存：</b>新增、修改、删除、排序、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
   </div>
 
   <div class="card">
@@ -535,15 +535,24 @@
     }
   });
 
-  // Last-resort flush if the tab is closed while a write is still queued.
+  // ---- stop the server when every editor page is gone ----
+  // Heartbeat lets the server tell "page reloaded / another tab open"
+  // from "user actually closed the page".
+  function ping(){ api("/api/ping").catch(() => {}); }
+  ping();
+  setInterval(ping, 3000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) ping();
+  });
+
   window.addEventListener("pagehide", () => {
-    if (pending > 0 && doc){
-      try {
-        navigator.sendBeacon("/api/save", new Blob([JSON.stringify({
-          data: doc, force: true, backup: false
-        })], {type:"application/json"}));
-      } catch(e){}
-    }
+    // Flush a still-queued write, then say goodbye. One beacon, so the
+    // server writes the data before it starts shutting down.
+    const payload = {};
+    if (pending > 0 && doc) payload.data = doc;
+    try {
+      navigator.sendBeacon("/api/bye", new Blob([JSON.stringify(payload)], {type:"application/json"}));
+    } catch(e){}
   });
 
   loadData();
