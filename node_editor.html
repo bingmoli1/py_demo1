@@ -125,6 +125,24 @@
   .toast.bad{background:#b91c1c}
   @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   kbd{background:#eef1f6;border:1px solid #dde3ec;border-radius:4px;padding:1px 5px;font:11px ui-monospace,Consolas,monospace;color:var(--muted)}
+  .guide{border:1px solid var(--line);border-radius:10px;background:#fbfcfe;margin:0 0 14px;font-size:12.5px;color:var(--muted)}
+  .guide summary{cursor:pointer;padding:10px 14px;color:var(--text);font-weight:600;list-style:none;user-select:none}
+  .guide summary::-webkit-details-marker{display:none}
+  .guide summary::before{content:"▸";display:inline-block;margin-right:8px;color:var(--primary);font-size:13px}
+  .guide[open] summary::before{content:"▾"}
+  .guide-body{border-top:1px solid var(--line2);padding:6px 14px 12px;line-height:1.8}
+  .guide-row{padding:4px 0}
+  .guide-row b{color:var(--text);font-weight:600}
+  .guide-row.alt{color:var(--faint);border-top:1px dashed var(--line2);margin-top:6px;padding-top:8px}
+  .selguide{margin-top:10px;border:1px solid var(--line);border-radius:9px;background:#f8faff;padding:10px 12px;font-size:12px;line-height:1.7}
+  .sg-title{font-weight:600;color:var(--text);margin-bottom:5px}
+  .sg-list{margin:0;padding:0 0 0 20px}
+  .sg-list li{padding:2px 0}
+  .sg-k{display:inline-block;min-width:52px;color:var(--primary);font-weight:600}
+  .sg-v{color:var(--muted)}
+  .sg-result{margin-top:7px;padding-top:7px;border-top:1px solid var(--line2);color:var(--text);font-weight:600}
+  .sg-warn{margin-top:6px;color:var(--danger);font-weight:600}
+  .sg-note,.sg-empty{color:var(--faint);margin-top:4px}
 </style>
 </head>
 <body>
@@ -147,6 +165,17 @@
     <span>⚠️</span>
     <div><b>自动保存：</b>新增、修改、删除、排序、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
   </div>
+
+  <details class="guide">
+    <summary>选择器怎么填？点开看 sel / sel_all 的抓取规则</summary>
+    <div class="guide-body">
+      <div class="guide-row"><b>不填选择器（直接订阅）</b>：URL 本身就是订阅地址，程序直接下载，不进页面抓选择器。</div>
+      <div class="guide-row"><b>sel · 填 1 个</b>：打开 URL 这个页面，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素从内容里提取 1 条订阅链接，<b>所有匹配项全部保存</b>（同一段文字里有多条链接时只取其中第一条）。</div>
+      <div class="guide-row"><b>sel · 填 2 个</b>：第 1 行是列表页里的链接选择器，取<b>第一个</b>匹配元素的 <code>href</code> 跳进那个页面；第 2 行是进入后页面里的内容选择器，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素提取 1 条订阅链接，<b>所有匹配项全部保存</b>。</div>
+      <div class="guide-row"><b>sel_all · 填 2 个</b>：第 1 行在 URL 这个列表页里选出<b>所有</b>带 <code>href</code> 的匹配元素，把这些链接页<b>打开</b>；第 2 行在<b>每一个</b>进入的页面里取所有匹配元素的内容，从内容里提取订阅链接，<b>所有页面、所有匹配元素的结果全部保存</b>。也就是「列表页的一批页面链接 → 每个页面里的订阅地址」。</div>
+      <div class="guide-row alt">细节：<code>sel_all</code> 最后一层按 <code>value</code> → 文字（<code>textContent</code>）→ <code>href</code> 取第一个非空值，每个元素的内容里只匹配第一条链接，但所有匹配元素的结果都会保存（例如 <code>input</code> 的订阅地址在 <code>value</code> 里，所以 value 优先）；<code>sel</code> 的取值顺序则是文字 → <code>value</code>。中间层必须选到带 <code>href</code> 的元素（一般是 <code>&lt;a&gt;</code> 标签）；<code>sel</code> 多于 2 行时第 3 行起会被忽略，多层请改用 <code>sel_all</code>；同一节点同时写了 <code>sel</code> 和 <code>sel_all</code> 时，v2.py 只认 <code>sel_all</code>。</div>
+    </div>
+  </details>
 
   <div class="card">
     <div class="toolbar">
@@ -208,14 +237,15 @@
         <label>抓取模式</label>
         <div class="radios" id="radios">
           <label class="radio on" data-mode="direct"><input type="radio" name="mode" value="direct" checked><span><b>直接订阅链接</b><span>URL 本身就是订阅内容</span></span></label>
-          <label class="radio" data-mode="sel"><input type="radio" name="mode" value="sel"><span><b>sel 选择器</b><span>从页面里取链接</span></span></label>
-          <label class="radio" data-mode="sel_all"><input type="radio" name="mode" value="sel_all"><span><b>sel_all 递归</b><span>逐层递归抓取</span></span></label>
+          <label class="radio" data-mode="sel"><input type="radio" name="mode" value="sel"><span><b>sel 选择器</b><span>最多 2 行，所有匹配项都保存</span></span></label>
+          <label class="radio" data-mode="sel_all"><input type="radio" name="mode" value="sel_all"><span><b>sel_all 递归</b><span>每层取所有链接进入下一页，结果全部保存</span></span></label>
         </div>
       </div>
       <div class="field hidden" id="selField">
         <label for="fSel">选择器</label>
         <textarea id="fSel" spellcheck="false" placeholder=".btn-default&#10;input"></textarea>
         <div class="hint">每行一个 CSS 选择器，空行会被忽略。保存为 <code>sel</code> 或 <code>sel_all</code> 数组。</div>
+        <div id="selGuide" class="selguide"></div>
       </div>
       <div class="grid2">
         <div class="field">
@@ -313,8 +343,10 @@
       const errHtml = (typeof it.err === "number")
         ? '<span class="err-num' + (it.err === 0 ? " err-zero" : "") + '">' + it.err + '</span>'
         : '<span class="dash">—</span>';
+      const selTip = sels.map((s, k) =>
+        "第 " + (k+1) + " 行  " + s + "  →  " + selRole(m, k, sels.length)).join("\n");
       const selHtml = sels.length
-        ? '<div class="selector" title="' + esc(sels.join("\n")) + '">' + esc(sels.join(" / ")) + '</div>'
+        ? '<div class="selector" title="' + esc(selTip) + '">' + esc(sels.join(" / ")) + '</div>'
         : '<span class="dash">—</span>';
       return '<tr class="' + (selected.has(i) ? "sel-row" : "") + '">' +
         '<td><input type="checkbox" class="chk" data-act="check" data-i="' + i + '"' + (selected.has(i) ? " checked" : "") + '></td>' +
@@ -432,10 +464,56 @@
   }
   function closeModal(){ $("#backdrop").classList.remove("show"); editing = null; }
 
+  // What each selector line actually does in v2.py.
+  function selRole(m, idx, n){
+    if (m === "sel"){
+      if (n === 1) return "在打开的页面里取所有匹配元素的文字 / value，每个元素各提取 1 条订阅链接";
+      if (idx === 0) return "取第一个匹配元素的 href 地址，跳进那个页面";
+      if (idx === 1) return "进入后的页面里取所有匹配元素的文字 / value，每个元素各提取 1 条订阅链接";
+      return "不会被使用（sel 只读取前两行）";
+    }
+    if (m === "sel_all"){
+      if (n === 1) return "直接在 URL 打开的页面里取所有匹配元素的内容（value → 文字 → href），每个元素各提取 1 条订阅链接";
+      return idx < n - 1
+        ? "取当前页面里所有匹配元素的 href，并发进入这些链接页（没有 href 的跳过）"
+        : "在每一个进入的页面里取所有匹配元素的内容（value → 文字 → href），每个元素各提取 1 条订阅链接";
+    }
+    return "";
+  }
+
+  function syncSelGuide(){
+    const box = $("#selGuide");
+    if (!box) return;
+    const m = $$('input[name="mode"]').find(r => r.checked).value;
+    if (m === "direct"){ box.innerHTML = ""; return; }
+    const sels = $("#fSel").value.split("\n").map(s => s.trim()).filter(Boolean);
+    const n = sels.length;
+    let html = '<div class="sg-title">' + (m === "sel" ? "sel 执行顺序" : "sel_all 执行顺序") + '</div>';
+    if (!n){
+      html += '<div class="sg-empty">按行填写选择器，这里会显示每一行的作用。</div>';
+    } else {
+      html += '<ol class="sg-list">' + sels.map((_, k) =>
+        '<li><span class="sg-k">第 ' + (k+1) + ' 行</span><span class="sg-v">' + esc(selRole(m, k, n)) + '</span></li>'
+      ).join('') + '</ol>';
+    }
+    html += '<div class="sg-result">' + (m === "sel"
+      ? '结果：所有匹配项全部保存，每个匹配元素各 1 条订阅链接'
+      : '结果：所有进入的页面、所有匹配元素各 1 条订阅链接，全部保存') + '</div>';
+    if (m === "sel" && n)
+      html += '<div class="sg-note">同一段文字里出现多条链接时，该元素只取第一条；要进入多个链接页请改用 sel_all。</div>';
+    if (m === "sel" && n > 2)
+      html += '<div class="sg-warn">sel 只读取前两行，第 3 行起会被忽略；要抓多层请改用 sel_all。</div>';
+    if (m === "sel_all" && n)
+      html += '<div class="sg-note">最后一层按 value → 文字 → href 取内容，每个元素的内容里只取第一条链接；' +
+        (n > 1 ? '中间层没有 href 的元素会跳过（一般是 a 标签）。' : '只填 1 行时不会跳页，直接在当前页取内容。') + '</div>';
+    box.innerHTML = html;
+  }
+
   function syncModeUI(){
     const m = $$('input[name="mode"]').find(r => r.checked).value;
     $$(".radio").forEach(el => el.classList.toggle("on", el.dataset.mode === m));
     $("#selField").classList.toggle("hidden", m === "direct");
+    syncSelGuide();
   }
 
   function saveNode(){
@@ -484,6 +562,7 @@
   $("#btnSaveNode").addEventListener("click", saveNode);
   $("#backdrop").addEventListener("click", e => { if (e.target === $("#backdrop")) closeModal(); });
   $("#radios").addEventListener("change", syncModeUI);
+  $("#fSel").addEventListener("input", syncSelGuide);
   $$(".radio").forEach(el => el.addEventListener("click", () => {
     el.querySelector("input").checked = true; syncModeUI();
   }));
