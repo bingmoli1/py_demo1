@@ -14,9 +14,6 @@
             "url": "https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/v2ray"
         },
         {
-            "url": "https://raw.githubusercontent.com/hans-thomas/v2ray-subscription/refs/heads/master/servers.txt"
-        },
-        {
             "url": "https://raw.githubusercontent.com/free-nodes/v2rayfree/main/sub"
         },
         {
@@ -39,9 +36,6 @@
         },
         {
             "url": "https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Long_term_subscription2"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/ccpthisbigdog/freedomchina/refs/heads/main/subdom.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/hello-world-1989/cn-news/main/end-gfw-together"
@@ -85,13 +79,6 @@
                 "article code"
             ],
             "err": 0
-        },
-        {
-            "url": "https://github.com/free-nodes/v2rayfree",
-            "sel": [
-                "code"
-            ],
-            "err": 13
         },
         {
             "url": "https://v2ray-free.github.io/",
@@ -218,9 +205,6 @@
             "err": 0
         },
         {
-            "url": "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt"
-        },
-        {
             "url": "https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub"
         },
         {
@@ -246,9 +230,6 @@
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/vmess"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/vless"
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/temporary"
