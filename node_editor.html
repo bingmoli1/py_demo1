@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>init.json 节点管理</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --line:#e5e9f0; --line2:#eef1f6;
+    --text:#1f2937; --muted:#6b7280; --faint:#9ca3af;
+    --primary:#2563eb; --primary-soft:#eaf1ff; --danger:#dc2626;
+    --danger-soft:#fef2f2; --warn:#ea580c; --warn-soft:#fff5ed;
+    --green:#059669; --green-soft:#ecfdf5; --purple:#7c3aed; --purple-soft:#f3eeff;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  .app{max-width:1280px;margin:0 auto;padding:28px 24px 60px}
+
+  .top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+  .title-wrap h1{font-size:22px;line-height:1.3;margin:0 0 6px;font-weight:650;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .path{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--line);padding:2px 7px;border-radius:5px}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+  .badge.saved{background:var(--green-soft);color:var(--green);border-color:#c7f0df}
+  .badge.dirty{background:var(--warn-soft);color:var(--warn);border-color:#ffdcc0}
+  .badge.busy{background:var(--primary-soft);color:var(--primary);border-color:#cfdfff}
+  .badge.error{background:var(--danger-soft);color:var(--danger);border-color:#fbd5d5}
+
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 13px;font-size:13px;font-weight:500;transition:.15s;white-space:nowrap}
+  .btn:hover{border-color:#c9d2e3;background:#f9fbff}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 1px 2px rgba(37,99,235,.2)}
+  .btn.primary:hover{background:#1d4fd8}
+  .btn.danger{color:var(--danger);border-color:#f3cccc}
+  .btn.danger:hover{background:var(--danger-soft)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+  .notice{background:#fffbeb;border:1px solid #fde9b8;color:#92400e;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:flex;gap:9px;align-items:flex-start}
+  .notice b{font-weight:650}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+  .toolbar .grow{flex:1 1 260px}
+  #search{width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;outline:none}
+  #search:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+  select{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;outline:none}
+  select:focus{border-color:var(--primary)}
+  .chk{width:15px;height:15px;accent-color:var(--primary);cursor:pointer;vertical-align:middle}
+  .lbl{color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer}
+  .sep{width:1px;height:22px;background:var(--line);margin:0 2px}
+  .muted-count{color:var(--muted);font-size:12px}
+
+  .table-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:940px}
+  thead th{position:sticky;top:0;background:#fafbfe;text-align:left;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:1}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--line2);vertical-align:middle}
+  tbody tr:hover{background:#fafcff}
+  tbody tr.sel-row{background:var(--primary-soft)}
+  tbody tr:last-child td{border-bottom:none}
+  .col-chk{width:38px}.col-no{width:48px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .col-mode{width:104px}.col-selector{width:230px}.col-err{width:64px}.col-ops{width:210px}
+  .url-cell{max-width:460px}
+  .url-link{color:var(--primary);text-decoration:none;word-break:break-all;display:block}
+  .url-link:hover{text-decoration:underline}
+  .url-text{word-break:break-all;display:block}
+  .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;display:inline-block;white-space:nowrap}
+  .tag.direct{background:#eef2f7;color:#475569}
+  .tag.sel{background:var(--purple-soft);color:var(--purple)}
+  .tag.sel_all{background:var(--primary-soft);color:var(--primary)}
+  .selector{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;color:var(--muted);word-break:break-all}
+  .err-num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--warn)}
+  .err-zero{color:var(--faint);font-weight:400}
+  .dash{color:var(--faint)}
+  .ops{display:flex;gap:5px;flex-wrap:wrap}
+  .mini{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 8px;font-size:12px;color:var(--muted);line-height:1.5}
+  .mini:hover{border-color:#c9d2e3;background:#f5f8ff;color:var(--primary)}
+  .mini.red:hover{background:var(--danger-soft);border-color:#f3cccc;color:var(--danger)}
+  .mini:disabled{opacity:.3;cursor:not-allowed}
+  .empty{text-align:center;padding:52px 20px;color:var(--muted)}
+  .empty strong{display:block;color:var(--text);font-size:15px;margin-bottom:6px}
+
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line);background:#fafbfe;flex-wrap:wrap}
+  .stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+  .stats b{color:var(--text);font-weight:650;font-variant-numeric:tabular-nums}
+  .restore{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+  .restore select{max-width:210px;padding:5px 8px;font-size:12px}
+
+  .backdrop{position:fixed;inset:0;background:rgba(17,24,39,.42);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+  .backdrop.show{display:flex}
+  .modal{background:#fff;border-radius:14px;width:min(620px,100%);box-shadow:0 20px 60px rgba(16,24,40,.25);overflow:hidden}
+  .modal-head{padding:18px 22px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center}
+  .modal-head h2{margin:0;font-size:17px;font-weight:650}
+  .x{border:none;background:transparent;font-size:22px;color:var(--faint);line-height:1;padding:0 4px}
+  .x:hover{color:var(--text)}
+  .modal-body{padding:20px 22px;max-height:70vh;overflow:auto}
+  .field{margin-bottom:16px}
+  .field > label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
+  .field .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .field input[type=text],.field input[type=number],.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;outline:none;background:#fbfcfe}
+  .field input:focus,.field textarea:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+  .field textarea{resize:vertical;min-height:88px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12.5px;line-height:1.7}
+  .radios{display:flex;gap:8px;flex-wrap:wrap}
+  .radio{border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer;display:flex;gap:8px;align-items:flex-start;flex:1 1 160px;background:#fbfcfe}
+  .radio:hover{border-color:#c9d2e3}
+  .radio.on{border-color:var(--primary);background:var(--primary-soft)}
+  .radio input{margin:3px 0 0;accent-color:var(--primary)}
+  .radio b{font-size:13px;font-weight:600;display:block}
+  .radio span{font-size:11.5px;color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .modal-foot{padding:14px 22px;border-top:1px solid var(--line2);display:flex;justify-content:flex-end;gap:9px;background:#fafbfe}
+  .hidden{display:none !important}
+
+  #toast{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .toast{background:#1f2937;color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);animation:pop .2s ease-out;max-width:420px}
+  .toast.bad{background:#b91c1c}
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  kbd{background:#eef1f6;border:1px solid #dde3ec;border-radius:4px;padding:1px 5px;font:11px ui-monospace,Consolas,monospace;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="title-wrap">
+      <h1>init.json 节点管理</h1>
+      <div class="sub">
+        <span id="status" class="badge busy"><span class="dot"></span>加载中…</span>
+        <span>文件：</span><span class="path" id="filePath">init.json</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="btnReload">重新加载</button>
+      <button class="btn primary" id="btnAdd">+ 新增节点</button>
+    </div>
+  </div>
+
+  <div class="notice">
+    <span>⚠️</span>
+    <div><b>自动保存：</b>新增、修改、删除、排序、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="grow"><input id="search" type="text" placeholder="搜索 URL 或选择器…"></div>
+      <select id="modeFilter">
+        <option value="all">全部模式</option>
+        <option value="direct">直接订阅链接</option>
+        <option value="sel">sel 选择器</option>
+        <option value="sel_all">sel_all 递归</option>
+        <option value="error">有错误计数</option>
+      </select>
+      <div class="sep"></div>
+      <label class="lbl"><input type="checkbox" class="chk" id="checkAll"> 全选当前列表</label>
+      <button class="btn danger" id="btnBatchDel" disabled>删除选中 (0)</button>
+      <span class="muted-count" id="shownCount"></span>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <colgroup>
+          <col class="col-chk"><col class="col-no"><col><col class="col-mode">
+          <col class="col-selector"><col class="col-err"><col class="col-ops">
+        </colgroup>
+        <thead><tr>
+          <th></th><th>#</th><th>URL</th><th>模式</th><th>选择器（每行一个）</th><th>err</th><th>操作</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty hidden" id="empty">
+        <strong>没有匹配的节点</strong>
+        换个关键词，或点右上角「+ 新增节点」
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="stats" id="stats"></div>
+      <div class="restore">
+        <span>备份恢复</span>
+        <select id="backupList"><option value="">（无备份）</option></select>
+        <button class="btn" id="btnRestore" style="padding:5px 10px;font-size:12px">恢复</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="modalTitle">新增节点</h2>
+      <button class="x" id="btnCloseModal" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="fUrl">URL <span style="color:var(--danger)">*</span></label>
+        <input id="fUrl" type="text" placeholder="https://example.com/sub" spellcheck="false">
+        <div class="hint">订阅链接，或需要抓取订阅链接的网页地址。</div>
+      </div>
+      <div class="field">
+        <label>抓取模式</label>
+        <div class="radios" id="radios">
+          <label class="radio on" data-mode="direct"><input type="radio" name="mode" value="direct" checked><span><b>直接订阅链接</b><span>URL 本身就是订阅内容</span></span></label>
+          <label class="radio" data-mode="sel"><input type="radio" name="mode" value="sel"><span><b>sel 选择器</b><span>从页面里取链接</span></span></label>
+          <label class="radio" data-mode="sel_all"><input type="radio" name="mode" value="sel_all"><span><b>sel_all 递归</b><span>逐层递归抓取</span></span></label>
+        </div>
+      </div>
+      <div class="field hidden" id="selField">
+        <label for="fSel">选择器</label>
+        <textarea id="fSel" spellcheck="false" placeholder=".btn-default&#10;input"></textarea>
+        <div class="hint">每行一个 CSS 选择器，空行会被忽略。保存为 <code>sel</code> 或 <code>sel_all</code> 数组。</div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label for="fErr">err 错误计数</label>
+          <input id="fErr" type="number" min="0" step="1" placeholder="留空表示不写入">
+          <div class="hint">由 v2.py 自动维护，一般留空或填 0。</div>
+        </div>
+        <div class="field">
+          <label>写入方式</label>
+          <div class="hint" style="margin-top:9px">点「确定」即写入文件，无需再次确认。<kbd>Esc</kbd> 关闭弹窗。</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="btnCancel">取消</button>
+      <button class="btn primary" id="btnSaveNode">确定，立即写入</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  let doc = null, baseMtime = null, editing = null;
+  let saveQueue = Promise.resolve(), pending = 0, savedOnce = false;
+  let uiState = "loading";
+  const selected = new Set();
+
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  const modeOf = it => it && it.sel_all ? "sel_all" : (it && it.sel ? "sel" : "direct");
+  const modeLabel = m => ({direct:"直接链接",sel:"sel",sel_all:"sel_all"}[m]);
+
+  function toast(msg, bad){
+    const el = document.createElement("div");
+    el.className = "toast" + (bad ? " bad" : "");
+    el.textContent = msg;
+    $("#toast").appendChild(el);
+    setTimeout(() => el.remove(), bad ? 5000 : 2600);
+  }
+
+  function updateStatus(){
+    const m = {
+      loading: ["busy",  "加载中…"],
+      saving:  ["busy",  "正在自动保存…"],
+      saved:   ["saved", "已自动保存"],
+      error:   ["error", "保存失败"]
+    }[uiState];
+    const el = $("#status");
+    el.className = "badge " + m[0];
+    el.innerHTML = '<span class="dot"></span>' + m[1];
+  }
+  function setState(s){ uiState = s; updateStatus(); }
+
+  async function api(path, body){
+    const opt = body === undefined
+      ? {method:"GET"}
+      : {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)};
+    const r = await fetch(path, opt);
+    let j;
+    try { j = await r.json(); } catch(e){ throw new Error("服务返回异常 (HTTP " + r.status + ")"); }
+    return {status:r.status, json:j};
+  }
+
+  function safeHref(u){
+    return /^https?:\/\//i.test(u) ? esc(u) : null;
+  }
+
+  function visibleRows(){
+    const q = $("#search").value.trim().toLowerCase();
+    const mf = $("#modeFilter").value;
+    return doc.select.map((it,i) => ({it,i})).filter(({it}) => {
+      if (mf === "error" && !(typeof it.err === "number" && it.err > 0)) return false;
+      if (["direct","sel","sel_all"].includes(mf) && modeOf(it) !== mf) return false;
+      if (!q) return true;
+      const hay = [it.url, ...(it.sel || []), ...(it.sel_all || [])].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function render(){
+    if (!doc) return;
+    const rows = visibleRows();
+    $("#tbody").innerHTML = rows.map(({it,i}) => {
+      const m = modeOf(it);
+      const sels = it.sel_all || it.sel || [];
+      const href = safeHref(it.url);
+      const urlHtml = href
+        ? '<a class="url-link" href="' + href + '" target="_blank" rel="noopener noreferrer">' + esc(it.url) + '</a>'
+        : '<span class="url-text">' + esc(it.url) + '</span>';
+      const errHtml = (typeof it.err === "number")
+        ? '<span class="err-num' + (it.err === 0 ? " err-zero" : "") + '">' + it.err + '</span>'
+        : '<span class="dash">—</span>';
+      const selHtml = sels.length
+        ? '<div class="selector" title="' + esc(sels.join("\n")) + '">' + esc(sels.join(" / ")) + '</div>'
+        : '<span class="dash">—</span>';
+      return '<tr class="' + (selected.has(i) ? "sel-row" : "") + '">' +
+        '<td><input type="checkbox" class="chk" data-act="check" data-i="' + i + '"' + (selected.has(i) ? " checked" : "") + '></td>' +
+        '<td class="col-no">' + (i+1) + '</td>' +
+        '<td class="url-cell">' + urlHtml + '</td>' +
+        '<td><span class="tag ' + m + '">' + modeLabel(m) + '</span></td>' +
+        '<td>' + selHtml + '</td>' +
+        '<td>' + errHtml + '</td>' +
+        '<td><div class="ops">' +
+          '<button class="mini" data-act="edit" data-i="' + i + '">编辑</button>' +
+          '<button class="mini" data-act="dup" data-i="' + i + '">复制</button>' +
+          '<button class="mini" data-act="up" data-i="' + i + '"' + (i === 0 ? " disabled" : "") + '>↑</button>' +
+          '<button class="mini" data-act="down" data-i="' + i + '"' + (i === doc.select.length-1 ? " disabled" : "") + '>↓</button>' +
+          '<button class="mini red" data-act="del" data-i="' + i + '">删除</button>' +
+        '</div></td></tr>';
+    }).join("");
+
+    $("#empty").classList.toggle("hidden", rows.length > 0);
+    $("#shownCount").textContent = "显示 " + rows.length + " / " + doc.select.length;
+    $("#checkAll").checked = rows.length > 0 && rows.every(r => selected.has(r.i));
+    const n = doc.select.length;
+    const cnt = k => doc.select.filter(it => modeOf(it) === k).length;
+    const errs = doc.select.filter(it => typeof it.err === "number" && it.err > 0).length;
+    $("#stats").innerHTML = "共 <b>" + n + "</b> 个节点　直接链接 <b>" + cnt("direct") +
+      "</b>　sel <b>" + cnt("sel") + "</b>　sel_all <b>" + cnt("sel_all") +
+      "</b>　错误计数 &gt;0 <b>" + errs + "</b>　选中 <b>" + selected.size + "</b>";
+    $("#btnBatchDel").disabled = selected.size === 0;
+    $("#btnBatchDel").textContent = "删除选中 (" + selected.size + ")";
+    updateStatus();
+  }
+
+  async function loadBackups(){
+    try {
+      const {json} = await api("/api/backups");
+      const sel = $("#backupList");
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">（选择备份）</option>' +
+        (json.files || []).map(f => '<option value="' + esc(f.name) + '">' + esc(f.name) + '</option>').join("");
+      if (cur) sel.value = cur;
+      $("#btnRestore").disabled = !json.files || json.files.length === 0;
+    } catch(e){ /* non-critical */ }
+  }
+
+  async function pushSave(data, backup, label){
+    let failed = false;
+    try {
+      let res = await api("/api/save", {data:data, base_mtime:baseMtime, backup:backup});
+      if (res.status === 409){
+        // No confirmation dialog: the current list always wins.
+        res = await api("/api/save", {data:data, base_mtime:baseMtime, backup:false, force:true});
+        toast("init.json 被外部改动，已按当前列表覆盖");
+      }
+      if (!res.json.ok) throw new Error(res.json.error || ("HTTP " + res.status));
+      baseMtime = res.json.mtime;
+      toast(label + " · 已自动保存");
+      if (backup) await loadBackups();
+    } catch(e){
+      failed = true;
+      toast("自动保存失败：" + e.message, true);
+    } finally {
+      pending--;
+      if (pending === 0) setState(failed ? "error" : "saved");
+      else if (!failed) setState("saving");
+    }
+  }
+
+  // Serialised writes: rapid clicks (e.g. deleting several rows) are queued
+  // in order instead of racing each other for init.json.
+  function autoSave(label){
+    if (!doc) return saveQueue;
+    const snapshot = JSON.parse(JSON.stringify(doc));
+    const backup = !savedOnce;
+    savedOnce = true;
+    pending++;
+    setState("saving");
+    render();
+    saveQueue = saveQueue
+      .catch(() => {})
+      .then(() => pushSave(snapshot, backup, label));
+    return saveQueue;
+  }
+
+  async function loadData(){
+    await saveQueue.catch(() => {});
+    try {
+      setState("loading");
+      const {status, json} = await api("/api/data");
+      if (!json.ok) throw new Error(json.error || ("HTTP " + status));
+      doc = json.data;
+      baseMtime = json.mtime;
+      savedOnce = false;
+      $("#filePath").textContent = json.path;
+      selected.clear();
+      setState("saved");
+      render();
+      await loadBackups();
+    } catch(e){
+      setState("error");
+      toast("加载失败：" + e.message, true);
+    }
+  }
+
+  function openModal(i){
+    editing = i;
+    const it = i === null ? null : doc.select[i];
+    $("#modalTitle").textContent = it ? "编辑节点 #" + (i+1) : "新增节点";
+    $("#fUrl").value = it ? (it.url || "") : "";
+    const m = it ? modeOf(it) : "direct";
+    $$('input[name="mode"]').forEach(r => { r.checked = r.value === m; });
+    $("#fSel").value = it ? (it.sel_all || it.sel || []).join("\n") : "";
+    $("#fErr").value = it && typeof it.err === "number" ? String(it.err) : "";
+    syncModeUI();
+    $("#backdrop").classList.add("show");
+    setTimeout(() => $("#fUrl").focus(), 50);
+  }
+  function closeModal(){ $("#backdrop").classList.remove("show"); editing = null; }
+
+  function syncModeUI(){
+    const m = $$('input[name="mode"]').find(r => r.checked).value;
+    $$(".radio").forEach(el => el.classList.toggle("on", el.dataset.mode === m));
+    $("#selField").classList.toggle("hidden", m === "direct");
+  }
+
+  function saveNode(){
+    const idx = editing;
+    const url = $("#fUrl").value.trim();
+    if (!url){ toast("URL 不能为空", true); $("#fUrl").focus(); return; }
+    const m = $$('input[name="mode"]').find(r => r.checked).value;
+    const sels = $("#fSel").value.split("\n").map(s => s.trim()).filter(Boolean);
+    if (m !== "direct" && sels.length === 0){ toast("选择器模式下至少填一个选择器", true); $("#fSel").focus(); return; }
+    const errRaw = $("#fErr").value.trim();
+    if (errRaw && !/^\d+$/.test(errRaw)){ toast("err 必须是非负整数或留空", true); return; }
+
+    const base = idx === null ? {} : Object.assign({}, doc.select[idx]);
+    ["url","sel","sel_all","err","id"].forEach(k => delete base[k]);
+    const obj = Object.assign({url:url}, base);
+    if (m === "sel") obj.sel = sels;
+    if (m === "sel_all") obj.sel_all = sels;
+    if (errRaw !== "") obj.err = parseInt(errRaw, 10);
+
+    if (idx === null) doc.select.push(obj);
+    else doc.select[idx] = obj;
+    closeModal();
+    selected.clear();
+    autoSave(idx === null ? "新增 1 个节点" : "修改节点 #" + (idx+1));
+  }
+
+  function removeAt(indices){
+    const set = new Set(indices);
+    doc.select = doc.select.filter((_,i) => !set.has(i));
+    selected.clear();
+    autoSave("删除 " + set.size + " 个节点");
+  }
+
+  function swap(i,j){
+    if (j < 0 || j >= doc.select.length) return;
+    const t = doc.select[i]; doc.select[i] = doc.select[j]; doc.select[j] = t;
+    selected.clear();
+    autoSave("调整顺序");
+  }
+
+  // ---- events ----
+  $("#btnAdd").addEventListener("click", () => openModal(null));
+  $("#btnReload").addEventListener("click", () => loadData());
+  $("#btnCloseModal").addEventListener("click", closeModal);
+  $("#btnCancel").addEventListener("click", closeModal);
+  $("#btnSaveNode").addEventListener("click", saveNode);
+  $("#backdrop").addEventListener("click", e => { if (e.target === $("#backdrop")) closeModal(); });
+  $("#radios").addEventListener("change", syncModeUI);
+  $$(".radio").forEach(el => el.addEventListener("click", () => {
+    el.querySelector("input").checked = true; syncModeUI();
+  }));
+  $("#search").addEventListener("input", render);
+  $("#modeFilter").addEventListener("change", render);
+  $("#checkAll").addEventListener("change", e => {
+    const rows = visibleRows().map(r => r.i);
+    if (e.target.checked) rows.forEach(i => selected.add(i));
+    else rows.forEach(i => selected.delete(i));
+    render();
+  });
+  $("#btnBatchDel").addEventListener("click", () => {
+    if (selected.size) removeAt(Array.from(selected));
+  });
+
+  $("#tbody").addEventListener("click", e => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const act = btn.dataset.act, i = parseInt(btn.dataset.i, 10);
+    if (act === "check"){ btn.checked ? selected.add(i) : selected.delete(i); render(); return; }
+    if (act === "edit") openModal(i);
+    if (act === "dup"){
+      const copy = JSON.parse(JSON.stringify(doc.select[i]));
+      delete copy.id;
+      doc.select.splice(i+1, 0, copy);
+      selected.clear();
+      autoSave("复制节点 #" + (i+1));
+    }
+    if (act === "up") swap(i, i-1);
+    if (act === "down") swap(i, i+1);
+    if (act === "del") removeAt([i]);
+  });
+
+  $("#btnRestore").addEventListener("click", async () => {
+    const name = $("#backupList").value;
+    if (!name){ toast("请先选择一个备份", true); return; }
+    try {
+      const {status, json} = await api("/api/restore", {name:name});
+      if (!json.ok) throw new Error(json.error || ("HTTP " + status));
+      toast("已恢复备份 " + name);
+      await loadData();
+    } catch(e){ toast("恢复失败：" + e.message, true); }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && $("#backdrop").classList.contains("show")) closeModal();
+    if (e.key === "Enter" && $("#backdrop").classList.contains("show") && e.target.id !== "fSel"){
+      e.preventDefault(); saveNode();
+    }
+  });
+
+  // Last-resort flush if the tab is closed while a write is still queued.
+  window.addEventListener("pagehide", () => {
+    if (pending > 0 && doc){
+      try {
+        navigator.sendBeacon("/api/save", new Blob([JSON.stringify({
+          data: doc, force: true, backup: false
+        })], {type:"application/json"}));
+      } catch(e){}
+    }
+  });
+
+  loadData();
+})();
+</script>
+</body>
+</html>

@@ -62,14 +62,6 @@
             "url": "https://raw.githubusercontent.com/umelabs/node.umelabs.dev/master/Subscribe/v2ray.md"
         },
         {
-            "url": "https://www.stairnode.com/",
-            "sel": [
-                ".post-title",
-                "span"
-            ],
-            "err": 13
-        },
-        {
             "url": "https://github.com/VoroninaYanina/free-nodes",
             "sel": [
                 "code"
@@ -89,14 +81,6 @@
                 "code"
             ],
             "err": 0
-        },
-        {
-            "url": "https://v2raydog.com/",
-            "sel": [
-                ".entry-title a",
-                "span"
-            ],
-            "err": 13
         },
         {
             "url": "https://github.com/qzwqzw/freeVpn",
@@ -158,14 +142,6 @@
             "err": 0
         },
         {
-            "url": "https://www.clashstair.com/r/category/freenode",
-            "sel": [
-                "h2  a",
-                "span"
-            ],
-            "err": 13
-        },
-        {
             "url": "https://v2raynode.com/",
             "sel": [
                 ".item-heading a",
@@ -206,14 +182,6 @@
                 "p"
             ],
             "err": 0
-        },
-        {
-            "url": "https://www.wanzhuanmi.com/",
-            "sel": [
-                "h2  a",
-                "span"
-            ],
-            "err": 13
         },
         {
             "url": "https://nodefree.me/",
