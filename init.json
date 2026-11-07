@@ -5,7 +5,8 @@
             "sel_all": [
                 ".btn-default",
                 "input"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/ninjastrikers/Nexus-nodes/main/configs/all.txt"
@@ -85,14 +86,15 @@
             "sel": [
                 ".xcblog-blog-url",
                 "p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://github.com/WLget/V2ray_free",
             "sel": [
                 "code"
             ],
-            "err": 0
+            "err": 1
         },
         {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
@@ -123,7 +125,7 @@
             "sel": [
                 "a"
             ],
-            "err": 0
+            "err": 1
         },
         {
             "url": "https://v2raynode.com/",
@@ -139,7 +141,7 @@
                 "h2 a",
                 "p"
             ],
-            "err": 5
+            "err": 9
         },
         {
             "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt"
@@ -157,7 +159,7 @@
                 ".hidden a",
                 "p"
             ],
-            "err": 0
+            "err": 4
         },
         {
             "url": "https://v2rayshare.net/",
@@ -187,7 +189,8 @@
             "sel": [
                 ".xcblog-blog-url",
                 ".col-md-8 p"
-            ]
+            ],
+            "err": 0
         },
         {
             "url": "https://t.me/s/hkaa0",

@@ -21,6 +21,7 @@ USER_AGENT = (
 
 not_clean_arr = set()
 num_add = 0
+new_failures = set()
 select = None
 lock = None
 PAGE_LIMIT = None
@@ -50,6 +51,11 @@ def add_error_count(cfg):
     """没抓到订阅链接时,给配置对象叠加错误次数"""
     if cfg is None:
         return
+
+    # 本轮刚由成功转为失败的条目单独记下来:
+    # 收尾时跳过清库,否则上一轮抓到的订阅会被一并删掉
+    if cfg.get('err', 0) == 0:
+        new_failures.add(cfg.get('id', cfg.get('url')))
 
     cfg['err'] = cfg.get('err', 0) + 1
 
@@ -523,6 +529,34 @@ class SubGet:
                 url
             )
 
+            # 首页可能被分流到落地页或加载不全。先确认第一层
+            # 选择器真的出现,否则重新加载;避免一次抖动就让
+            # 整条 sel_all 任务直接判失败。
+            if all_levels and selectors:
+                first_el = selectors[0]
+                for attempt in range(1, 4):
+                    try:
+                        await page.wait_for_selector(
+                            first_el,
+                            state="attached",
+                            timeout=8000
+                        )
+                        break
+                    except Exception:
+                        if attempt == 3:
+                            print(
+                                f"首页始终未出现 {first_el}: {url}"
+                            )
+                            raise
+                        print(
+                            f"首页未出现 {first_el}，"
+                            f"重新加载({attempt}/3): {url}"
+                        )
+                        await self.goto_with_retry(
+                            page,
+                            url
+                        )
+
             # ==================================================
             # sel_all 模式:递归抓取,所有 URL 都保存
             # ==================================================
@@ -822,7 +856,9 @@ async def main():
 
             lock = asyncio.Lock()
 
-            PAGE_LIMIT = asyncio.Semaphore(16)
+            # sel_all 会对同一个站点一次性开出几十个子页面,
+            # 并发过高时集体撞上 15s 超时,压低到 6 留出余量
+            PAGE_LIMIT = asyncio.Semaphore(6)
 
             # ==========================================
             # 单个任务
@@ -889,9 +925,18 @@ async def main():
             # 清理数据库
             # ==========================================
 
-            cleanup_database(
-                sorted(not_clean_arr)
-            )
+            # 本轮有条目刚由成功转为失败时跳过清理:
+            # 否则上一轮抓到、这一轮没抓到的订阅会被全部删掉
+            # (sel_all 一次能写几十条,删起来最明显)
+            if new_failures:
+                print(
+                    f"本轮 {len(new_failures)} 条由成功转为失败，"
+                    "跳过清理以免误删已有订阅"
+                )
+            else:
+                cleanup_database(
+                    sorted(not_clean_arr)
+                )
 
         finally:
 
