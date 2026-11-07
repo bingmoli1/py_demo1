@@ -124,6 +124,9 @@
   .toast.bad{background:#b91c1c}
   @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   kbd{background:#eef1f6;border:1px solid #dde3ec;border-radius:4px;padding:1px 5px;font:11px ui-monospace,Consolas,monospace;color:var(--muted)}
+  .page-notes{margin-top:18px}
+  .page-notes .notice{margin-bottom:12px}
+  .page-notes .guide{margin-bottom:0}
   .guide{border:1px solid var(--line);border-radius:10px;background:#fbfcfe;margin:0 0 14px;font-size:12.5px;color:var(--muted)}
   .guide summary{cursor:pointer;padding:10px 14px;color:var(--text);font-weight:600;list-style:none;user-select:none}
   .guide summary::-webkit-details-marker{display:none}
@@ -159,22 +162,6 @@
       <button class="btn primary" id="btnAdd">+ 新增节点</button>
     </div>
   </div>
-
-  <div class="notice">
-    <span>⚠️</span>
-    <div><b>自动保存：</b>新增、修改、删除、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
-  </div>
-
-  <details class="guide">
-    <summary>选择器怎么填？点开看 sel / sel_all 的抓取规则</summary>
-    <div class="guide-body">
-      <div class="guide-row"><b>不填选择器（直接订阅）</b>：URL 本身就是订阅地址，程序直接下载，不进页面抓选择器。</div>
-      <div class="guide-row"><b>sel · 填 1 个</b>：打开 URL 这个页面，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素从内容里提取 1 条订阅链接，<b>所有匹配项全部保存</b>（同一段文字里有多条链接时只取其中第一条）。</div>
-      <div class="guide-row"><b>sel · 填 2 个</b>：第 1 行是列表页里的链接选择器，取<b>第一个</b>匹配元素的 <code>href</code> 跳进那个页面；第 2 行是进入后页面里的内容选择器，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素提取 1 条订阅链接，<b>所有匹配项全部保存</b>。</div>
-      <div class="guide-row"><b>sel_all · 填 2 个</b>：第 1 行在 URL 这个列表页里选出<b>所有</b>带 <code>href</code> 的匹配元素，把这些链接页<b>打开</b>；第 2 行在<b>每一个</b>进入的页面里取所有匹配元素的内容，从内容里提取订阅链接，<b>所有页面、所有匹配元素的结果全部保存</b>。也就是「列表页的一批页面链接 → 每个页面里的订阅地址」。</div>
-      <div class="guide-row alt">细节：<code>sel_all</code> 最后一层按 <code>value</code> → 文字（<code>textContent</code>）→ <code>href</code> 取第一个非空值，每个元素的内容里只匹配第一条链接，但所有匹配元素的结果都会保存（例如 <code>input</code> 的订阅地址在 <code>value</code> 里，所以 value 优先）；<code>sel</code> 的取值顺序则是文字 → <code>value</code>。中间层必须选到带 <code>href</code> 的元素（一般是 <code>&lt;a&gt;</code> 标签）；<code>sel</code> 多于 2 行时第 3 行起会被忽略，多层请改用 <code>sel_all</code>；同一节点同时写了 <code>sel</code> 和 <code>sel_all</code> 时，v2.py 只认 <code>sel_all</code>。</div>
-    </div>
-  </details>
 
   <div class="card">
     <div class="toolbar">
@@ -217,6 +204,24 @@
         <button class="btn" id="btnRestore" style="padding:5px 10px;font-size:12px">恢复</button>
       </div>
     </div>
+  </div>
+
+  <div class="page-notes">
+    <div class="notice">
+      <span>⚠️</span>
+      <div><b>自动保存：</b>新增、修改、删除、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
+    </div>
+
+    <details class="guide">
+      <summary>选择器怎么填？点开看 sel / sel_all 的抓取规则</summary>
+      <div class="guide-body">
+        <div class="guide-row"><b>不填选择器（直接订阅）</b>：URL 本身就是订阅地址，程序直接下载，不进页面抓选择器。</div>
+        <div class="guide-row"><b>sel · 填 1 个</b>：打开 URL 这个页面，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素从内容里提取 1 条订阅链接，<b>所有匹配项全部保存</b>（同一段文字里有多条链接时只取其中第一条）。</div>
+        <div class="guide-row"><b>sel · 填 2 个</b>：第 1 行是列表页里的链接选择器，取<b>第一个</b>匹配元素的 <code>href</code> 跳进那个页面；第 2 行是进入后页面里的内容选择器，取<b>所有</b>匹配元素的文字 / <code>value</code>，每个元素提取 1 条订阅链接，<b>所有匹配项全部保存</b>。</div>
+        <div class="guide-row"><b>sel_all · 填 2 个</b>：第 1 行在 URL 这个列表页里选出<b>所有</b>带 <code>href</code> 的匹配元素，把这些链接页<b>打开</b>；第 2 行在<b>每一个</b>进入的页面里取所有匹配元素的内容，从内容里提取订阅链接，<b>所有页面、所有匹配元素的结果全部保存</b>。也就是「列表页的一批页面链接 → 每个页面里的订阅地址」。</div>
+        <div class="guide-row alt">细节：<code>sel_all</code> 最后一层按 <code>value</code> → 文字（<code>textContent</code>）→ <code>href</code> 取第一个非空值，每个元素的内容里只匹配第一条链接，但所有匹配元素的结果都会保存（例如 <code>input</code> 的订阅地址在 <code>value</code> 里，所以 value 优先）；<code>sel</code> 的取值顺序则是文字 → <code>value</code>。中间层必须选到带 <code>href</code> 的元素（一般是 <code>&lt;a&gt;</code> 标签）；<code>sel</code> 多于 2 行时第 3 行起会被忽略，多层请改用 <code>sel_all</code>；同一节点同时写了 <code>sel</code> 和 <code>sel_all</code> 时，v2.py 只认 <code>sel_all</code>。</div>
+      </div>
+    </details>
   </div>
 </div>
 
