@@ -13,20 +13,16 @@ Env vars:
 
 import json
 import os
-import shutil
 import sys
 import threading
 import time
 import traceback
 import webbrowser
-from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INIT_PATH = os.path.join(BASE_DIR, "init.json")
 HTML_PATH = os.path.join(BASE_DIR, "node_editor.html")
-BACKUP_DIR = os.path.join(BASE_DIR, "init_backups")
-MAX_BACKUPS = 10
 MAX_BODY = 5 * 1024 * 1024
 START_PORT = 8765
 
@@ -115,25 +111,6 @@ def validate(data):
         # id is assigned at runtime by v2.py, never store it in the file
         item.pop("id", None)
     return data
-
-
-def make_backup():
-    if not os.path.isfile(INIT_PATH):
-        return None
-    os.makedirs(BACKUP_DIR, exist_ok=True)
-    name = "init_%s.json" % datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    dest = os.path.join(BACKUP_DIR, name)
-    shutil.copy2(INIT_PATH, dest)
-    files = sorted(
-        (f for f in os.listdir(BACKUP_DIR) if f.startswith("init_") and f.endswith(".json")),
-        reverse=True,
-    )
-    for old in files[MAX_BACKUPS:]:
-        try:
-            os.remove(os.path.join(BACKUP_DIR, old))
-        except OSError:
-            pass
-    return name
 
 
 def write_init(data):
@@ -301,20 +278,6 @@ class Handler(BaseHTTPRequestHandler):
             except (ValueError, OSError, json.JSONDecodeError) as e:
                 self._fail(500, str(e))
             return
-        if path == "/api/backups":
-            files = []
-            if os.path.isdir(BACKUP_DIR):
-                files = sorted(
-                    (
-                        {"name": f, "size": os.path.getsize(os.path.join(BACKUP_DIR, f))}
-                        for f in os.listdir(BACKUP_DIR)
-                        if f.startswith("init_") and f.endswith(".json")
-                    ),
-                    key=lambda x: x["name"],
-                    reverse=True,
-                )
-            self._ok(files=files)
-            return
         self._fail(404, "not found")
 
     def do_POST(self):
@@ -333,14 +296,8 @@ class Handler(BaseHTTPRequestHandler):
                 ):
                     self._fail(409, "init.json was changed outside this page since it was loaded")
                     return
-                # The page asks for a backup only on its first save per
-                # session, so rapid auto-saves cannot flush out the useful
-                # "state before editing" backup.
-                backup = None
-                if body.get("backup", True):
-                    backup = make_backup()
                 write_init(data)
-                self._ok(mtime=file_mtime(), backup=backup, count=len(data["select"]))
+                self._ok(mtime=file_mtime(), count=len(data["select"]))
                 return
 
             if path == "/api/bye":
@@ -358,23 +315,6 @@ class Handler(BaseHTTPRequestHandler):
                 self._ok(closing=True)
                 if self.state:
                     self.state.bye()
-                return
-
-            if path == "/api/restore":
-                body = self._body()
-                name = body.get("name")
-                if not isinstance(name, str) or os.path.basename(name) != name:
-                    self._fail(400, "invalid backup name")
-                    return
-                src = os.path.join(BACKUP_DIR, name)
-                if not os.path.isfile(src):
-                    self._fail(404, "backup not found")
-                    return
-                with open(src, "r", encoding="utf-8") as f:
-                    data = validate(json.load(f))
-                make_backup()
-                write_init(data)
-                self._ok(mtime=file_mtime(), count=len(data["select"]))
                 return
 
             self._fail(404, "not found")

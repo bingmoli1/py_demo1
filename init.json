@@ -1,15 +1,10 @@
 {
     "select": [
         {
-            "url": "https://zh.v2nodes.com/",
-            "sel_all": [
-                ".btn-default",
-                "input"
-            ],
-            "err": 0
+            "url": "https://raw.githubusercontent.com/ninjastrikers/Nexus-nodes/main/configs/all.txt"
         },
         {
-            "url": "https://raw.githubusercontent.com/ninjastrikers/Nexus-nodes/main/configs/all.txt"
+            "url": "https://gt.zrfnb.art/https://raw.githubusercontent.com/shaoyouvip/free/refs/heads/main/base64.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/v2ray"
@@ -94,7 +89,7 @@
             "sel": [
                 "code"
             ],
-            "err": 1
+            "err": 3
         },
         {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
@@ -125,7 +120,7 @@
             "sel": [
                 "a"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://v2raynode.com/",
@@ -136,30 +131,15 @@
             "err": 0
         },
         {
-            "url": "https://clashv2ray-hub.github.io/",
-            "sel": [
-                "h2 a",
-                "p"
-            ],
-            "err": 9
-        },
-        {
             "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt"
-        },
-        {
-            "url": "https://github.com/tolinkshare2/tolinkshare2.github.io",
-            "sel": [
-                "article code"
-            ],
-            "err": 0
         },
         {
             "url": "https://www.mlfenx.com/freenode",
             "sel": [
                 ".hidden a",
-                "p"
+                "a"
             ],
-            "err": 4
+            "err": 0
         },
         {
             "url": "https://v2rayshare.net/",
@@ -250,9 +230,6 @@
             "url": "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_base64_Sub.txt"
         },
         {
-            "url": "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_base64_Sub.txt"
-        },
-        {
             "url": "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge_base64.txt"
         },
         {
@@ -262,9 +239,6 @@
             "url": "https://raw.githubusercontent.com/Alirewa/V2ray-Configs/main/config.txt"
         },
         {
-            "url": "https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector/main/sub/mix"
-        },
-        {
             "url": "https://raw.githubusercontent.com/ts-sf/fly/main/v2"
         },
         {
@@ -272,9 +246,6 @@
         },
         {
             "url": "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/configs_base64.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/MustafaBaqer/VestraNet-Nodes/main/protocols/vless.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/3000S-HTTP/sNSub/main/output/vmess_base64.txt"
@@ -290,6 +261,14 @@
         },
         {
             "url": "https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/all"
+        },
+        {
+            "url": "https://zh.v2nodes.com/",
+            "sel_all": [
+                ".btn-default",
+                "input"
+            ],
+            "err": 0
         }
     ]
 }

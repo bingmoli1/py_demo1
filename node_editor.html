@@ -91,9 +91,6 @@
   .foot{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line);background:#fafbfe;flex-wrap:wrap}
   .stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px}
   .stats b{color:var(--text);font-weight:650;font-variant-numeric:tabular-nums}
-  .restore{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
-  .restore select{max-width:210px;padding:5px 8px;font-size:12px}
-
   .backdrop{position:fixed;inset:0;background:rgba(17,24,39,.42);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
   .backdrop.show{display:flex}
   .modal{background:#fff;border-radius:14px;width:min(620px,100%);box-shadow:0 20px 60px rgba(16,24,40,.25);overflow:hidden}
@@ -198,18 +195,13 @@
 
     <div class="foot">
       <div class="stats" id="stats"></div>
-      <div class="restore">
-        <span>备份恢复</span>
-        <select id="backupList"><option value="">（无备份）</option></select>
-        <button class="btn" id="btnRestore" style="padding:5px 10px;font-size:12px">恢复</button>
-      </div>
     </div>
   </div>
 
   <div class="page-notes">
     <div class="notice">
       <span>⚠️</span>
-      <div><b>自动保存：</b>新增、修改、删除、复制都会立即写入 init.json，不弹确认、不需要手动保存。本次页面首次改动前会自动备份原文件，误删可在底部「备份恢复」找回。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
+      <div><b>自动保存：</b>新增、修改、删除、复制都会立即写入 init.json，不弹确认、不需要手动保存。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
     </div>
 
     <details class="guide">
@@ -278,7 +270,7 @@
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   let doc = null, baseMtime = null, editing = null;
-  let saveQueue = Promise.resolve(), pending = 0, savedOnce = false;
+  let saveQueue = Promise.resolve(), pending = 0;
   let uiState = "loading";
   const selected = new Set();
 
@@ -380,31 +372,18 @@
     updateStatus();
   }
 
-  async function loadBackups(){
-    try {
-      const {json} = await api("/api/backups");
-      const sel = $("#backupList");
-      const cur = sel.value;
-      sel.innerHTML = '<option value="">（选择备份）</option>' +
-        (json.files || []).map(f => '<option value="' + esc(f.name) + '">' + esc(f.name) + '</option>').join("");
-      if (cur) sel.value = cur;
-      $("#btnRestore").disabled = !json.files || json.files.length === 0;
-    } catch(e){ /* non-critical */ }
-  }
-
-  async function pushSave(data, backup, label){
+  async function pushSave(data, label){
     let failed = false;
     try {
-      let res = await api("/api/save", {data:data, base_mtime:baseMtime, backup:backup});
+      let res = await api("/api/save", {data:data, base_mtime:baseMtime});
       if (res.status === 409){
         // No confirmation dialog: the current list always wins.
-        res = await api("/api/save", {data:data, base_mtime:baseMtime, backup:false, force:true});
+        res = await api("/api/save", {data:data, base_mtime:baseMtime, force:true});
         toast("init.json 被外部改动，已按当前列表覆盖");
       }
       if (!res.json.ok) throw new Error(res.json.error || ("HTTP " + res.status));
       baseMtime = res.json.mtime;
       toast(label + " · 已自动保存");
-      if (backup) await loadBackups();
     } catch(e){
       failed = true;
       toast("自动保存失败：" + e.message, true);
@@ -420,14 +399,12 @@
   function autoSave(label){
     if (!doc) return saveQueue;
     const snapshot = JSON.parse(JSON.stringify(doc));
-    const backup = !savedOnce;
-    savedOnce = true;
     pending++;
     setState("saving");
     render();
     saveQueue = saveQueue
       .catch(() => {})
-      .then(() => pushSave(snapshot, backup, label));
+      .then(() => pushSave(snapshot, label));
     return saveQueue;
   }
 
@@ -439,12 +416,10 @@
       if (!json.ok) throw new Error(json.error || ("HTTP " + status));
       doc = json.data;
       baseMtime = json.mtime;
-      savedOnce = false;
       $("#filePath").textContent = json.path;
       selected.clear();
       setState("saved");
       render();
-      await loadBackups();
     } catch(e){
       setState("error");
       toast("加载失败：" + e.message, true);
@@ -587,17 +562,6 @@
       autoSave("复制节点 #" + (i+1));
     }
     if (act === "del") removeAt([i]);
-  });
-
-  $("#btnRestore").addEventListener("click", async () => {
-    const name = $("#backupList").value;
-    if (!name){ toast("请先选择一个备份", true); return; }
-    try {
-      const {status, json} = await api("/api/restore", {name:name});
-      if (!json.ok) throw new Error(json.error || ("HTTP " + status));
-      toast("已恢复备份 " + name);
-      await loadData();
-    } catch(e){ toast("恢复失败：" + e.message, true); }
   });
 
   document.addEventListener("keydown", e => {
