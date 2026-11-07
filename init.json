@@ -1,9 +1,6 @@
 {
     "select": [
         {
-            "url": "https://hiddenio.com/sub/all?format=base64&limit=100"
-        },
-        {
             "url": "https://zh.v2nodes.com/",
             "sel_all": [
                 ".btn-default",
@@ -243,13 +240,6 @@
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2"
-        },
-        {
-            "url": "https://github.com/Flik6/getNode",
-            "sel": [
-                "article ul:nth-child(6) li:nth-child(4)"
-            ],
-            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan"
