@@ -63,6 +63,13 @@
   .table-scroll{overflow-x:auto}
   table{width:100%;border-collapse:collapse;min-width:940px}
   thead th{position:sticky;top:0;background:#fafbfe;text-align:left;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:1}
+  thead th.sortable{cursor:pointer;user-select:none}
+  thead th.sortable:hover{color:var(--primary);background:#f2f6ff}
+  thead th.sorted{color:var(--primary)}
+  .th-btn{border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;letter-spacing:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .th-btn:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:3px}
+  .sort-ind{font-size:9px;line-height:1;color:var(--faint);width:10px;text-align:center}
+  th.sorted .sort-ind{color:var(--primary)}
   tbody td{padding:11px 12px;border-bottom:1px solid var(--line2);vertical-align:middle}
   tbody tr:hover{background:#fafcff}
   tbody tr.sel-row{background:var(--primary-soft)}
@@ -183,7 +190,9 @@
           <col class="col-selector"><col class="col-err"><col class="col-ops">
         </colgroup>
         <thead><tr>
-          <th></th><th>#</th><th>URL</th><th>模式</th><th>选择器（每行一个）</th><th>err</th><th>操作</th>
+          <th></th><th>#</th><th>URL</th><th>模式</th><th>选择器（每行一个）</th>
+          <th id="errTh" class="sortable" aria-sort="none"><button type="button" class="th-btn" id="errSortBtn" title="按 err 数值排序（点击：大→小），只改变显示顺序">err <span class="sort-ind" id="errSortInd">↕</span></button></th>
+          <th>操作</th>
         </tr></thead>
         <tbody id="tbody"></tbody>
       </table>
@@ -273,6 +282,7 @@
   let saveQueue = Promise.resolve(), pending = 0;
   let uiState = "loading";
   const selected = new Set();
+  let errSort = null;   // null=原始顺序, "desc"=大→小, "asc"=小→大（只影响显示）
 
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
     ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
@@ -314,6 +324,37 @@
     return /^https?:\/\//i.test(u) ? esc(u) : null;
   }
 
+  // 没写 err 的按 0 算（v2.py 里也是 cfg.get('err', 0)）
+  const errVal = it => {
+    const n = Number(it && it.err);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  // 只重排显示用的行数组，绝不改 doc.select：
+  // 数组顺序决定 v2.py 运行时分配的 id，写回文件会打乱节点编号。
+  function sortedRows(rows){
+    if (!errSort) return rows;
+    const dir = errSort === "asc" ? 1 : -1;
+    return rows.slice().sort((a, b) => {
+      const d = errVal(a.it) - errVal(b.it);   // 数值比较，不是字符串比较
+      return d ? d * dir : a.i - b.i;          // 同值保持原始编号顺序
+    });
+  }
+
+  function updateSortHeader(){
+    const th = $("#errTh");
+    th.classList.toggle("sorted", !!errSort);
+    th.setAttribute("aria-sort",
+      errSort === "asc" ? "ascending" : errSort === "desc" ? "descending" : "none");
+    $("#errSortInd").textContent =
+      errSort === "asc" ? "▲" : errSort === "desc" ? "▼" : "↕";
+    $("#errSortBtn").title = errSort === "desc"
+      ? "err 从大到小，点击改为从小到大（只改变显示顺序）"
+      : errSort === "asc"
+        ? "err 从小到大，点击恢复原始顺序（只改变显示顺序）"
+        : "按 err 数值排序（点击：大→小），只改变显示顺序";
+  }
+
   function visibleRows(){
     const q = $("#search").value.trim().toLowerCase();
     const mf = $("#modeFilter").value;
@@ -328,7 +369,8 @@
 
   function render(){
     if (!doc) return;
-    const rows = visibleRows();
+    updateSortHeader();
+    const rows = sortedRows(visibleRows());
     $("#tbody").innerHTML = rows.map(({it,i}) => {
       const m = modeOf(it);
       const sels = it.sel_all || it.sel || [];
@@ -359,7 +401,8 @@
     }).join("");
 
     $("#empty").classList.toggle("hidden", rows.length > 0);
-    $("#shownCount").textContent = "显示 " + rows.length + " / " + doc.select.length;
+    $("#shownCount").textContent = "显示 " + rows.length + " / " + doc.select.length +
+      (errSort ? (errSort === "desc" ? " · err 大→小" : " · err 小→大") : "");
     $("#checkAll").checked = rows.length > 0 && rows.every(r => selected.has(r.i));
     const n = doc.select.length;
     const cnt = k => doc.select.filter(it => modeOf(it) === k).length;
@@ -537,6 +580,10 @@
     el.querySelector("input").checked = true; syncModeUI();
   }));
   $("#search").addEventListener("input", render);
+  $("#errTh").addEventListener("click", () => {
+    errSort = errSort === null ? "desc" : errSort === "desc" ? "asc" : null;
+    render();
+  });
   $("#modeFilter").addEventListener("change", render);
   $("#checkAll").addEventListener("change", e => {
     const rows = visibleRows().map(r => r.i);

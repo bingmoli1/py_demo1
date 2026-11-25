@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# PyInstaller 构建产物与本地分发的 exe（需要入库时用 git add -f）
+build/
+dist/
+*.spec
+*.exe
+
+# 本地 IDE / 编辑器自动备份 / WorkBuddy 项目数据
+.idea/
+.vscode/
+.workbuddy/
+init_backups/
+node_editor.log
+
+# Windows 快捷方式（启动文件夹里的副本，不是源码）
+*.lnk
