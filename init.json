@@ -1,49 +1,13 @@
 {
     "select": [
         {
-            "url": "https://leidahub.top/v2ray.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/chenzhihan1751-cyber/node-sub-zixf/main/sub/base64.txt"
-        },
-        {
-            "url": "https://cdn.jsdelivr.net/gh/LeilaoMi/AutoMergePublicNodes-Optimized@main/output/global.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/oversizexl/FreeSubsCheck/main/base64.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/guo0914/Free-Node/m%20ain/v2ray.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/kooker/FreeSubsCheck/main/base64.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/ninjastrikers/Nexus-nodes/main/configs/all.txt"
-        },
-        {
-            "url": "https://gt.zrfnb.art/https://raw.githubusercontent.com/shaoyouvip/free/refs/heads/main/base64.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/v2ray"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/free-nodes/v2rayfree/main/sub"
+            "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
         },
         {
             "url": "https://ghfast.top/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/v.txt"
         },
         {
-            "url": "https://sub.proxygo.org/v2ray.php?key=d0024f089eb5c92f14fe0b803cec92ed"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/ishalumi/proxy-node-collector/main/output/nodes_base64.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
-        },
-        {
-            "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
+            "url": "https://cdn.jsdelivr.net/gh/free18/v2ray@main/v.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Long_term_subscription2"
@@ -68,28 +32,21 @@
             "sel": [
                 "code"
             ],
-            "err": 1
-        },
-        {
-            "url": "https://github.com/v2raywindows/v2raywindows.github.io",
-            "sel": [
-                "a"
-            ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://github.com/crashgfw/free-airport-nodes",
             "sel": [
                 "code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://github.com/qzwqzw/freeVpn",
             "sel": [
                 "article code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://v2ray-free.github.io/",
@@ -97,28 +54,28 @@
                 ".xcblog-blog-url",
                 "p"
             ],
-            "err": 5
+            "err": 0
         },
         {
             "url": "https://github.com/WLget/V2ray_free",
             "sel": [
                 "code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
             "sel": [
                 "pre"
             ],
-            "err": 5
+            "err": 12
         },
         {
             "url": "https://github.com/hysteria350/free-jichang",
             "sel": [
                 "code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt"
@@ -129,14 +86,14 @@
                 ".athelas  a",
                 "code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://github.com/junjun266/FreeProxyGo?tab=readme-ov-file",
             "sel": [
                 "a"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://v2raynode.com/",
@@ -144,7 +101,7 @@
                 ".item-heading a",
                 "p"
             ],
-            "err": 5
+            "err": 0
         },
         {
             "url": "https://it.weoknow.com/data/dayupdate/1/z1.txt"
@@ -155,7 +112,7 @@
                 ".hidden a",
                 "a"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://v2rayshare.net/",
@@ -163,7 +120,7 @@
                 ".text-reset",
                 "p"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://nodefree.me/",
@@ -171,7 +128,7 @@
                 ".post-title a",
                 "p"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://oneclash.cc/",
@@ -179,7 +136,7 @@
                 ".post_def_title  a",
                 "p"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://clashnode.github.io/",
@@ -187,14 +144,14 @@
                 ".xcblog-blog-url",
                 ".col-md-8 p"
             ],
-            "err": 5
+            "err": 0
         },
         {
             "url": "https://t.me/s/hkaa0",
             "sel": [
                 ".media_supported_cont code"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://www.freeclashnode.com/free-node/",
@@ -202,7 +159,7 @@
                 ".item-heading a",
                 "p"
             ],
-            "err": 5
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub"
@@ -212,7 +169,7 @@
             "sel": [
                 "article [dir=\"auto\"]:nth-child(9) a"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://www.mibei77.com/",
@@ -220,7 +177,7 @@
                 ".item-heading a",
                 "p"
             ],
-            "err": 1
+            "err": 0
         },
         {
             "url": "https://raw.githubusercontent.com/freefq/free/master/v2"
@@ -285,7 +242,13 @@
                 ".btn-default",
                 "input"
             ],
-            "err": 1
+            "err": 0
+        },
+        {
+            "url": "https://raw.githubusercontent.com/free-nodes/v2rayfree/main/sub"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
         }
     ]
 }

@@ -210,7 +210,7 @@
   <div class="page-notes">
     <div class="notice">
       <span>⚠️</span>
-      <div><b>自动保存：</b>新增、修改、删除、复制都会立即写入 init.json，不弹确认、不需要手动保存。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。</div>
+      <div><b>自动保存：</b>新增、修改、删除都会立即写入 init.json，不弹确认、不需要手动保存。<b>关闭这个页面后服务和 cmd 窗口会自动退出</b>，下次使用重新双击「编辑节点.bat」（刷新页面不会退出）。注意 <code>v2.exe</code> 运行结束会回写 <code>err</code>，若与页面同时改动，会以当前列表为准覆盖；<code>id</code> 是运行时分配的，不会写入文件。<b>新增的节点一律放在列表第一位（#1）</b>；每次节点数量发生变化（新增 / 删除 / 批量删除）时会按 URL 去重：保留靠前那条（也就是新加的），<b>删掉后面重复的旧条目</b>，提示里会写出被删编号（按新增前的序号）；编辑节点不改变数量，不会触发去重。</div>
     </div>
 
     <details class="guide">
@@ -283,6 +283,7 @@
   let uiState = "loading";
   const selected = new Set();
   let errSort = null;   // null=原始顺序, "desc"=大→小, "asc"=小→大（只影响显示）
+  let savedCount = null; // 上一次写回文件的节点数，用来判断数量是否变化
 
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
     ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
@@ -395,7 +396,6 @@
         '<td>' + errHtml + '</td>' +
         '<td><div class="ops">' +
           '<button class="mini" data-act="edit" data-i="' + i + '">编辑</button>' +
-          '<button class="mini" data-act="dup" data-i="' + i + '">复制</button>' +
           '<button class="mini red" data-act="del" data-i="' + i + '">删除</button>' +
         '</div></td></tr>';
     }).join("");
@@ -439,9 +439,19 @@
 
   // Serialised writes: rapid clicks (e.g. deleting several rows) are queued
   // in order instead of racing each other for init.json.
-  function autoSave(label){
+  // 节点数量变化（新增 / 删除 / 批量删除）就顺带去重；编辑数量不变，不动列表。
+  function autoSave(label, frontInserted){
     if (!doc) return saveQueue;
+    let dropped = [];
+    if (savedCount !== null && doc.select.length !== savedCount){
+      dropped = dedupeByUrl(frontInserted);
+    }
+    if (dropped.length){
+      const shown = dropped.slice(0, 5).join("、#") + (dropped.length > 5 ? "…" : "");
+      label += " · 去重 " + dropped.length + " 条（删 #" + shown + "）";
+    }
     const snapshot = JSON.parse(JSON.stringify(doc));
+    savedCount = snapshot.select.length;
     pending++;
     setState("saving");
     render();
@@ -459,6 +469,7 @@
       if (!json.ok) throw new Error(json.error || ("HTTP " + status));
       doc = json.data;
       baseMtime = json.mtime;
+      savedCount = doc.select.length;   // 重新加载后以文件里的实际数量为基准
       $("#filePath").textContent = json.path;
       selected.clear();
       setState("saved");
@@ -536,6 +547,24 @@
     syncSelGuide();
   }
 
+  // 按 URL 去重：新增节点插在 #1，所以同一个 URL 保留「第一次出现」的那条（新加的），
+  // 后面重复的旧条目全部删掉。空 URL 不参与去重（全部保留）。
+  // frontInserted=1 时把被删编号换算成「新增前」的 # 号，方便对照。
+  // 返回被删条目的 # 编号数组；由 autoSave() 在「节点数量发生变化」时调用。
+  function dedupeByUrl(frontInserted){
+    if (!doc) return [];
+    const seen = new Set(), kept = [], dropped = [];
+    doc.select.forEach((it, idx) => {
+      const u = typeof it.url === "string" ? it.url.trim() : "";
+      if (!u){ kept.push(it); return; }
+      if (seen.has(u)){ dropped.push(idx + 1 - (frontInserted || 0)); return; }
+      seen.add(u);
+      kept.push(it);
+    });
+    if (dropped.length) doc.select = kept;
+    return dropped;
+  }
+
   function saveNode(){
     const idx = editing;
     const url = $("#fUrl").value.trim();
@@ -553,11 +582,11 @@
     if (m === "sel_all") obj.sel_all = sels;
     if (errRaw !== "") obj.err = parseInt(errRaw, 10);
 
-    if (idx === null) doc.select.push(obj);
+    if (idx === null) doc.select.unshift(obj);   // 新增的一律放第一个（#1）
     else doc.select[idx] = obj;
     closeModal();
     selected.clear();
-    autoSave(idx === null ? "新增 1 个节点" : "修改节点 #" + (idx+1));
+    autoSave(idx === null ? "新增 1 个节点" : "修改节点 #" + (idx+1), idx === null ? 1 : 0);
   }
 
   function removeAt(indices){
@@ -601,13 +630,6 @@
     const act = btn.dataset.act, i = parseInt(btn.dataset.i, 10);
     if (act === "check"){ btn.checked ? selected.add(i) : selected.delete(i); render(); return; }
     if (act === "edit") openModal(i);
-    if (act === "dup"){
-      const copy = JSON.parse(JSON.stringify(doc.select[i]));
-      delete copy.id;
-      doc.select.splice(i+1, 0, copy);
-      selected.clear();
-      autoSave("复制节点 #" + (i+1));
-    }
     if (act === "del") removeAt([i]);
   });
 
