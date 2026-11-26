@@ -292,10 +292,12 @@
 
   function toast(msg, bad){
     const el = document.createElement("div");
-    el.className = "toast" + (bad ? " bad" : "");
+    // 提示里带「去重」说明删掉了重复节点，框变红醒目提醒，并多停留一会儿
+    const red = bad || String(msg).includes("去重");
+    el.className = "toast" + (red ? " bad" : "");
     el.textContent = msg;
     $("#toast").appendChild(el);
-    setTimeout(() => el.remove(), bad ? 5000 : 2600);
+    setTimeout(() => el.remove(), red ? 5000 : 2600);
   }
 
   function updateStatus(){

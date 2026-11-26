@@ -1,13 +1,44 @@
 {
     "select": [
         {
-            "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
+            "url": "https://yoyapai.com/category/mianfeijiedian",
+            "sel": [
+                ".wp-block-column a",
+                "code"
+            ]
         },
         {
-            "url": "https://ghfast.top/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/v.txt"
+            "url": "https://wanzhuanmi.com/",
+            "sel": [
+                ".excerpt a",
+                ".node-sub-url"
+            ]
+        },
+        {
+            "url": "https://clashstair.com/",
+            "sel": [
+                ".post-title a",
+                ".node-sub-url"
+            ]
+        },
+        {
+            "url": "https://freenodesub.com/",
+            "sel": [
+                ".text-reset",
+                ".node-sub-url"
+            ]
         },
         {
             "url": "https://cdn.jsdelivr.net/gh/free18/v2ray@main/v.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/free-nodes/v2rayfree/main/sub"
+        },
+        {
+            "url": "https://ghfast.top/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/v.txt"
         },
         {
             "url": "https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Long_term_subscription2"
@@ -62,13 +93,6 @@
                 "code"
             ],
             "err": 0
-        },
-        {
-            "url": "https://github.com/John19187/v2ray-SSR-Clash-Verge-Shadowrocke",
-            "sel": [
-                "pre"
-            ],
-            "err": 12
         },
         {
             "url": "https://github.com/hysteria350/free-jichang",
@@ -243,9 +267,6 @@
                 "input"
             ],
             "err": 0
-        },
-        {
-            "url": "https://raw.githubusercontent.com/free-nodes/v2rayfree/main/sub"
         },
         {
             "url": "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt"
